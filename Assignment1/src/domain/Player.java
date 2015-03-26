@@ -117,7 +117,7 @@ public class Player {
 	 * spent.
 	 * 
 	 * @param spent
-	 *            The money the player has just spent(not total).
+	 *            The money the player has just spent(NOT TOTAL).
 	 */
 	public void setSpent(int spent) {
 		this.spent = this.spent + spent;
