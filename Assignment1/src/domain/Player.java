@@ -18,11 +18,11 @@ public class Player {
 	 * The prizes that the player has got.
 	 */
 	private String prizes;// to be replaced by PrizeList
-	//discuss with tutor on whether I can do this.
+	// discuss with tutor on whether I can do this.
 	/**
 	 * The prize list save all the prizes that the player has already won.
 	 */
-	private List<Prize> prizeList;
+	private ArrayList<Prize> prizeList;
 	/**
 	 * The total worth of the prizes.
 	 */
@@ -122,4 +122,9 @@ public class Player {
 	public void setSpent(int spent) {
 		this.spent = this.spent + spent;
 	}
+
+	public List<Prize> getPrizeList() {
+		return prizeList;
+	}
+
 }

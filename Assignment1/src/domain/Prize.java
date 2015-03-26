@@ -20,6 +20,7 @@ public class Prize {
 	 * The worth of the prize.
 	 */
 	private int worth;
+	private int cost;
 
 	/**
 	 * The recommended constructor here, you should give all the informations
@@ -31,12 +32,15 @@ public class Prize {
 	 *            The description of the prize.
 	 * @param worth
 	 *            The worth of the prize.
+	 * @param cost
+	 *            The cost of the prize if user lose.
 	 */
-	public Prize(String name, String description, int worth) {
+	public Prize(String name, String description, int worth, int cost) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.worth = worth;
+		this.cost = cost;
 	}
 
 	/**
@@ -47,11 +51,14 @@ public class Prize {
 	 *            The name of the prize.
 	 * @param worth
 	 *            The worth of the prize.
+	 * @param cost
+	 *            The cost of the prize if user lose.
 	 */
-	public Prize(String name, int worth) {
+	public Prize(String name, int worth, int cost) {
 		super();
 		this.name = name;
 		this.worth = worth;
+		this.cost = cost;
 	}
 
 	/**
@@ -110,5 +117,13 @@ public class Prize {
 	 */
 	public void setWorth(int worth) {
 		this.worth = worth;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 }

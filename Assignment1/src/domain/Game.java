@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import systemTools.Tools;
@@ -19,6 +20,7 @@ public class Game {
 	 * Console is an object used for user input.
 	 */
 	private Scanner console;
+	private ArrayList<Prize> systemPrizeList;
 
 	/**
 	 * Default constructor for this class, the player has been set to null for
@@ -30,6 +32,14 @@ public class Game {
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
 		// to be improved
+		this.systemPrizeList = new ArrayList<Prize>();
+		// for further improve, here can be stored to a file.
+		int t = 1;
+		systemPrizeList.add(new Prize("Pen", t * 10, t++));
+		systemPrizeList.add(new Prize("Book", t * 10, t++));
+		systemPrizeList.add(new Prize("DVD", t * 10, t++));
+		systemPrizeList.add(new Prize("Mouse", t * 10, t++));
+		systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
 	}
 
 	/**
@@ -37,13 +47,15 @@ public class Game {
 	 * makeChoice() for user to choice an option.
 	 */
 	public void runMenu() {
-		showMenu();
-		try {
-			makeChoice();
-		} catch (IllegalInputException e) {
-			System.out.println(e.getMessage());
-			delay(3);
-			runMenu();
+		while (true) {
+			showMenu();
+			try {
+				makeChoice();
+				break;
+			} catch (IllegalInputException e) {
+				System.out.println(e.getMessage());
+				delay(3);
+			}
 		}
 	}
 
@@ -61,7 +73,7 @@ public class Game {
 		try {
 			choice = console.nextInt();
 		} catch (Exception e) {
-			throw new IllegalInputException("Please make choice using integer");
+			throw new IllegalInputException("Please make choice using integer.");
 		}
 		switch (choice) {
 		case 1:
@@ -79,6 +91,7 @@ public class Game {
 			}
 			break;
 		case 3:
+			System.out.println();
 			break;
 		case 4:
 			displayGameHelp();
@@ -88,7 +101,7 @@ public class Game {
 			break;
 		default:
 			throw new IllegalInputException(
-					"Please make choice using integer range 1 - 5");
+					"Please make choice using integer range 1 - 5.");
 		}
 	}
 
@@ -118,7 +131,7 @@ public class Game {
 	 * @param userGuess
 	 * @param systemGuess
 	 */
-	public void compareGuess(int userGuess, int systemGuess)
+	private void compareGuess(int userGuess, int systemGuess)
 			throws IllegalInputException {
 		if (userGuess > 5 || userGuess < 1) {
 			throw new IllegalInputException(
@@ -129,12 +142,18 @@ public class Game {
 		if (systemGuess == userGuess) {
 			System.out
 					.println("You are lucky! beacause you've just win a prize!");
-			// worth++
+			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// add
+																			// a
+			// prize
+			// that user
+			// has just
+			// won.
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
 			// after finish the class about <prize>, here should be improved.
 		}
-		// player.setSpent();// spent++
+		player.setSpent(systemPrizeList.get(userGuess).getWorth());// player.setSpent();//
+																	// spent++
 
 	}
 
@@ -144,8 +163,8 @@ public class Game {
 	private void displayGameHelp() {
 		System.out.println("Here is some useful information!");
 		System.out
-				.println("First,U will have to create a new player before you begin the game."
-						+ Tools.SEPARATOR);
+				.println("First,U will have to create a new player before you begin the game.");
+//		System.out.println(showPrizes());
 	}
 
 	/**
@@ -177,5 +196,17 @@ public class Game {
 		System.out.println("(5) Exit Game");
 		System.out.println("====================================");
 		System.out.println("Choose an option :");
+	}
+
+	private String showPrizes() {
+
+		String p = "Number Generated" + "	" + "Prize is" + "	" + "Prize Worth"
+				+ "	" + "Cost to player" + Tools.SEPARATOR;
+		for (Prize prize : systemPrizeList) {
+			p = p + (systemPrizeList.indexOf(prize) + 1) + "			"
+					+ prize.getName() + "		" + prize.getWorth() + "		"
+					+ prize.getCost() + Tools.SEPARATOR;
+		}
+		return p;
 	}
 }
