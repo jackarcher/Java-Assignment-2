@@ -33,10 +33,10 @@ public class Player {
 	private int spent;
 
 	/**
-	 * Default constructor. May never be called.
+	 * Default constructor. May seldom be called.
 	 */
 	public Player() {
-		this.name = "new";
+		this.name = "";
 		this.prizes = "";
 		this.prizeList = new ArrayList<Prize>();
 		this.worth = 0;

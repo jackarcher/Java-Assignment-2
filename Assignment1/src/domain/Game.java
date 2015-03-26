@@ -27,7 +27,7 @@ public class Game {
 	 * the game hasn't start yet.
 	 */
 	public Game() {
-		this.player = null;
+		this.player = new Player();
 		// the line below may be moved to other place.
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
@@ -51,7 +51,6 @@ public class Game {
 			showMenu();
 			try {
 				makeChoice();
-				break;
 			} catch (IllegalInputException e) {
 				System.out.println(e.getMessage());
 				delay(3);
@@ -75,30 +74,42 @@ public class Game {
 		} catch (Exception e) {
 			throw new IllegalInputException("Please make choice using integer.");
 		}
+		// if (choice != 1 && player.getName().isEmpty()) {
+		// System.out.println("You will have to create a new player first!");
+		// choice = 2;
+		// }
 		switch (choice) {
 		case 1:
-			setPlayer(new Player(console.nextLine()));
-			break;
-		case 2:
-			while (true) {
+			for (int i = 0; i < 3; i++) {
 				try {
-					guessPrize();
+					setPlayer();
 					break;
 				} catch (IllegalInputException e) {
 					// TODO Auto-generated catch block
 					System.out.println(e.getMessage());
 				}
 			}
+			System.out.println("U really just wanna play with me,right?");
+			return;
+		case 2:
+			while (true) {
+				try {
+					guessPrize();
+					break;
+				} catch (IllegalInputException e1) {
+					// TODO Auto-generated catch block
+					System.out.println(e1.getMessage());
+				}
+			}
 			break;
 		case 3:
-			System.out.println();
+			showUsersPrizes();
 			break;
 		case 4:
 			displayGameHelp();
 			break;
 		case 5:
 			System.exit(0);
-			break;
 		default:
 			throw new IllegalInputException(
 					"Please make choice using integer range 1 - 5.");
@@ -112,6 +123,7 @@ public class Game {
 		 */
 		System.out.println("Now Guess it! Input an integer from 1 - 5.");
 		int systemGuess = luckyGuessGenerator.randomIntGenerator();
+		System.out.println("The lucky number is:" + systemGuess); // test
 		int userGuess;
 		try {
 			userGuess = console.nextInt();
@@ -141,19 +153,13 @@ public class Game {
 		System.out.println("The lucky number is:" + systemGuess);
 		if (systemGuess == userGuess) {
 			System.out
-					.println("You are lucky! beacause you've just win a prize!");
-			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// add
-																			// a
-			// prize
-			// that user
-			// has just
-			// won.
+					.println("You are lucky! beacause you've just win a "+systemPrizeList.get(systemGuess-1).getName()+"!");
+			player.getPrizeList().add(systemPrizeList.get(systemGuess-1));// prize+=newprize
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
-			// after finish the class about <prize>, here should be improved.
 		}
-		player.setSpent(systemPrizeList.get(userGuess).getWorth());// player.setSpent();//
-																	// spent++
+		player.setSpent(systemPrizeList.get(systemGuess-1).getCost());// player.setSpent();//
+																		// spent++
 
 	}
 
@@ -164,7 +170,7 @@ public class Game {
 		System.out.println("Here is some useful information!");
 		System.out
 				.println("First,U will have to create a new player before you begin the game.");
-//		System.out.println(showPrizes());
+		System.out.println(showPrizes());
 	}
 
 	/**
@@ -173,8 +179,19 @@ public class Game {
 	 * @param player
 	 *            the player should be set.
 	 */
-	private void setPlayer(Player player) {
-		this.player = player;
+	private void setPlayer() throws IllegalInputException {
+		System.out.println("Enter your name plz:");
+		String temp = "";
+		try {
+			temp = console.nextLine();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (temp.isEmpty())
+			throw new IllegalInputException("No one is NULL!");
+		else
+			this.player = new Player(console.nextLine());
 	}
 
 	private void delay(int delaytime) {
@@ -208,5 +225,24 @@ public class Game {
 					+ prize.getCost() + Tools.SEPARATOR;
 		}
 		return p;
+	}
+
+	private void showUsersPrizes() {
+		if (!player.getPrizeList().isEmpty()) {
+			System.out.print("U have won: ");
+			int totalWorth = 0;
+			for (Prize prize : player.getPrizeList()) {
+				totalWorth += prize.getWorth();
+				System.out.print(prize.getName() + " ");
+			}
+			System.out.println(".");
+			System.out.println("Total worth is $" + totalWorth + ".");
+			System.out.println("And U have spent $" + player.getSpent() + ".");
+		} else if (player.getSpent() != 0)
+			System.out
+					.println("Em...I know U have spent some money on me, but sometime it is your luck to blame, right?");
+		else
+			System.out
+					.println("U must be kidding me, u haven't spent even 1 cent on me!");
 	}
 }
