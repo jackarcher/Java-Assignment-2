@@ -25,7 +25,7 @@ public class Game {
 	 * the game hasn't start yet.
 	 */
 	public Game() {
-		this.player = null;
+		this.player = new Player();
 		// the line below may be moved to other place.
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
