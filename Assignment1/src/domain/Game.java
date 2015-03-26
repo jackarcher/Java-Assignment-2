@@ -28,10 +28,8 @@ public class Game {
 	 */
 	public Game() {
 		this.player = new Player();
-		// the line below may be moved to other place.
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
-		// to be improved
 		this.systemPrizeList = new ArrayList<Prize>();
 		// for further improve, here can be stored to a file.
 		int t = 1;
@@ -80,12 +78,11 @@ public class Game {
 		// }
 		switch (choice) {
 		case 1:
-			for (int i = 0; i < 3; i++) {
+			while (true) {
 				try {
 					setPlayer();
 					break;
 				} catch (IllegalInputException e) {
-					// TODO Auto-generated catch block
 					System.out.println(e.getMessage());
 				}
 			}
@@ -97,7 +94,6 @@ public class Game {
 					guessPrize();
 					break;
 				} catch (IllegalInputException e1) {
-					// TODO Auto-generated catch block
 					System.out.println(e1.getMessage());
 				}
 			}
@@ -114,6 +110,27 @@ public class Game {
 			throw new IllegalInputException(
 					"Please make choice using integer range 1 - 5.");
 		}
+	}
+
+	/**
+	 * The setter of field player.
+	 * 
+	 * @param player
+	 *            the player should be set.
+	 */
+	private void setPlayer() throws IllegalInputException {
+		System.out.println("Enter your name plz:");
+		String temp = "Archer";
+		try {
+			temp = console.nextLine();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		temp = "Archer";
+		if (temp.isEmpty())
+			throw new IllegalInputException("No one is NULL!");
+		else
+			this.player.setName(temp);
 	}
 
 	private void guessPrize() throws IllegalInputException {
@@ -152,13 +169,13 @@ public class Game {
 		System.out.println("Your guess is " + userGuess);
 		System.out.println("The lucky number is:" + systemGuess);
 		if (systemGuess == userGuess) {
-			System.out
-					.println("You are lucky! beacause you've just win a "+systemPrizeList.get(systemGuess-1).getName()+"!");
-			player.getPrizeList().add(systemPrizeList.get(systemGuess-1));// prize+=newprize
+			System.out.println("You are lucky! beacause you've just win a "
+					+ systemPrizeList.get(systemGuess - 1).getName() + "!");
+			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// prize+=newprize
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
 		}
-		player.setSpent(systemPrizeList.get(systemGuess-1).getCost());// player.setSpent();//
+		player.setSpent(systemPrizeList.get(systemGuess - 1).getCost());// player.setSpent();//
 																		// spent++
 
 	}
@@ -171,27 +188,6 @@ public class Game {
 		System.out
 				.println("First,U will have to create a new player before you begin the game.");
 		System.out.println(showPrizes());
-	}
-
-	/**
-	 * The setter of field player.
-	 * 
-	 * @param player
-	 *            the player should be set.
-	 */
-	private void setPlayer() throws IllegalInputException {
-		System.out.println("Enter your name plz:");
-		String temp = "";
-		try {
-			temp = console.nextLine();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (temp.isEmpty())
-			throw new IllegalInputException("No one is NULL!");
-		else
-			this.player = new Player(console.nextLine());
 	}
 
 	private void delay(int delaytime) {
