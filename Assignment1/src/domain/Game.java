@@ -45,6 +45,7 @@ public class Game {
 	 * makeChoice() for user to choice an option.
 	 */
 	public void runMenu() {
+		System.out.println("Welcome to the Lucky Vending Machine");
 		while (true) {
 			showMenu();
 			try {
@@ -52,6 +53,7 @@ public class Game {
 			} catch (IllegalInputException e) {
 				System.out.println(e.getMessage());
 				delay(3);
+				continue;
 			}
 		}
 	}
@@ -72,18 +74,30 @@ public class Game {
 		} catch (Exception e) {
 			throw new IllegalInputException("Please make choice using integer.");
 		}
-		// if (choice != 1 && player.getName().isEmpty()) {
-		// System.out.println("You will have to create a new player first!");
-		// choice = 2;
-		// }
-		switch (choice) {
+		/*
+		 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
+		 * skipped This line below is added for the reason mentioned by this
+		 * page.
+		 */
+		console.nextLine();
+		/*
+		 * If u wanna actually PLAY the game. u will have to create a new
+		 * player. However if U only wanna check the game rule, this would'n be
+		 * necessary.
+		 */
+		if ((choice == 2 || choice == 3) && player.getName().isEmpty()) {
+			System.out.println("You will have to create a new player first!");
+			choice = 1;
+		}
+		switchLoop: switch (choice) {
 		case 1:
-			while (true) {
+			for (int i = 0; i < 3; i++) {
 				try {
 					setPlayer();
-					break;
+					break switchLoop;
 				} catch (IllegalInputException e) {
 					System.out.println(e.getMessage());
+					delay(3);
 				}
 			}
 			System.out.println("U really just wanna play with me,right?");
@@ -99,12 +113,13 @@ public class Game {
 			}
 			break;
 		case 3:
-			showUsersPrizes();
+			showUsersInformation();
 			break;
 		case 4:
 			displayGameHelp();
 			break;
 		case 5:
+			System.out.println("Hope U have enjoyed the game!");
 			System.exit(0);
 		default:
 			throw new IllegalInputException(
@@ -120,17 +135,14 @@ public class Game {
 	 */
 	private void setPlayer() throws IllegalInputException {
 		System.out.println("Enter your name plz:");
-		String temp = "Archer";
-		try {
-			temp = console.nextLine();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		temp = "Archer";
+		String temp = console.nextLine();
 		if (temp.isEmpty())
 			throw new IllegalInputException("No one is NULL!");
-		else
+		else {
 			this.player.setName(temp);
+			System.out.println("Hi," + this.player.getName()
+					+ ". Welcome to the LUCKY VENDING MACHINE!!");
+		}
 	}
 
 	private void guessPrize() throws IllegalInputException {
@@ -186,8 +198,11 @@ public class Game {
 	private void displayGameHelp() {
 		System.out.println("Here is some useful information!");
 		System.out
-				.println("First,U will have to create a new player before you begin the game.");
+				.println("First,U will have to create a new player before you begin the game."+Tools.SEPARATOR);
+		System.out.println("And here is the prize list!"+Tools.SEPARATOR);
 		System.out.println(showPrizes());
+		System.out.println("Press any key to continue.");
+		console.nextLine();
 	}
 
 	private void delay(int delaytime) {
@@ -200,7 +215,7 @@ public class Game {
 	}
 
 	private void showMenu() {
-		System.out.println("Welcome to the Lucky Vending Machine");
+		System.out.println("	Please choice an option:");
 		System.out.println("====================================");
 		System.out.println("(1) Set Up New Player");
 		System.out.println("(2) Guess A Prize");
@@ -223,9 +238,10 @@ public class Game {
 		return p;
 	}
 
-	private void showUsersPrizes() {
+	private void showUsersInformation() {
+		System.out.println("Hi," + this.player.getName());
 		if (!player.getPrizeList().isEmpty()) {
-			System.out.print("U have won: ");
+			System.out.print("So far, U have won: ");
 			int totalWorth = 0;
 			for (Prize prize : player.getPrizeList()) {
 				totalWorth += prize.getWorth();
