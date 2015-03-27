@@ -20,4 +20,4 @@ Done:
 			First,the one store all kind of prize. This one should be kept by the object game.
 			Second,the one store all prize that the player has already won. Kept by object player.
 			
-		rebuid all exceptions. maybe rebuid the whole logic of runMenu().
+	rebuid all exceptions. maybe rebuid the whole logic of runMenu().
