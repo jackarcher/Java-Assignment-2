@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class player, contains all the information of a player.
@@ -65,6 +64,12 @@ public class Player {
 		return name;
 	}
 
+	/**
+	 * The setter of the field name.
+	 * 
+	 * @param name
+	 *            The name that u wanna set.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -127,7 +132,12 @@ public class Player {
 		this.spent = this.spent + spent;
 	}
 
-	public List<Prize> getPrizeList() {
+	/**
+	 * The getter of the field PrizeList.
+	 * 
+	 * @return the prize list that the player has already won.
+	 */
+	public ArrayList<Prize> getPrizeList() {
 		return prizeList;
 	}
 

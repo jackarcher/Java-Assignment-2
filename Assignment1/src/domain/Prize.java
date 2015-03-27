@@ -20,6 +20,9 @@ public class Prize {
 	 * The worth of the prize.
 	 */
 	private int worth;
+	/**
+	 * The money that the prize will cost.
+	 */
 	private int cost;
 
 	/**
@@ -119,10 +122,21 @@ public class Prize {
 		this.worth = worth;
 	}
 
+	/**
+	 * The getter of the field cost.
+	 *
+	 * @return The money that the prize will cost.
+	 */
 	public int getCost() {
 		return cost;
 	}
 
+	/**
+	 * The setter of the field cost.
+	 * 
+	 * @param cost
+	 *            the cost the prize should be.
+	 */
 	public void setCost(int cost) {
 		this.cost = cost;
 	}

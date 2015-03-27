@@ -6,6 +6,19 @@ import java.util.Scanner;
 import systemTools.Tools;
 import Exceptions.IllegalInputException;
 
+/**
+ * This class refer to the game itself. As U can see, many method is actually
+ * private. The only two public method is the constructor and runMenu(). The
+ * 
+ * The first one is used for construct the game, because this is not a singleton
+ * pattern program, there is no need to private the constructor.
+ * 
+ * The second one is used for begin the game, so it should be a public one so
+ * that others can actually play the game.
+ * 
+ * @author archer
+ *
+ */
 public class Game {
 	/**
 	 * Player refer to the object indicates a player.
@@ -17,10 +30,13 @@ public class Game {
 	 */
 	private LuckyGuessGenerator luckyGuessGenerator;
 	/**
+	 * systemPrizeList is an ArrayList contains all the prizes in this machine.
+	 */
+	private ArrayList<Prize> systemPrizeList;
+	/**
 	 * Console is an object used for user input.
 	 */
 	private Scanner console;
-	private ArrayList<Prize> systemPrizeList;
 
 	/**
 	 * Default constructor for this class, the player has been set to null for
@@ -132,6 +148,7 @@ public class Game {
 	 * 
 	 * @param player
 	 *            the player should be set.
+	 * @throws IllegalInputException
 	 */
 	private void setPlayer() throws IllegalInputException {
 		System.out.println("Enter your name plz:");
@@ -145,6 +162,15 @@ public class Game {
 		}
 	}
 
+	
+	/**
+	 * This method is used for actually "play" the guess game.
+	 * 
+	 * @throws IllegalInputException
+	 *             In this method, this exception happens usually because user
+	 *             input something else rather than an integer. User should then
+	 *             follow the instruction to do it over again.
+	 */
 	private void guessPrize() throws IllegalInputException {
 		/*
 		 * after the prizelist already done, all the things about 5 should be
@@ -193,41 +219,9 @@ public class Game {
 	}
 
 	/**
-	 * Display the help information
+	 * This method is used for show all the information about the player. Such
+	 * as his or her name, and the game status so far.
 	 */
-	private void displayGameHelp() {
-		System.out.println("Here is some useful information!");
-		System.out
-				.println("First,U will have to create a new player before you begin the game."+Tools.SEPARATOR);
-		System.out.println("And here is the prize list!"+Tools.SEPARATOR);
-		System.out.println(showPrizes());
-		hold();
-	}
-
-	private void showMenu() {
-		System.out.println("	Please choice an option:");
-		System.out.println("====================================");
-		System.out.println("(1) Set Up New Player");
-		System.out.println("(2) Guess A Prize");
-		System.out.println("(3) What Have I Won So Far?");
-		System.out.println("(4) Display Game Help");
-		System.out.println("(5) Exit Game");
-		System.out.println("====================================");
-		System.out.println("Choose an option :");
-	}
-
-	private String showPrizes() {
-
-		String p = "Number Generated" + "	" + "Prize is" + "	" + "Prize Worth"
-				+ "	" + "Cost to player" + Tools.SEPARATOR;
-		for (Prize prize : systemPrizeList) {
-			p = p + (systemPrizeList.indexOf(prize) + 1) + "			"
-					+ prize.getName() + "		" + prize.getWorth() + "		"
-					+ prize.getCost() + Tools.SEPARATOR;
-		}
-		return p;
-	}
-
 	private void showUsersInformation() {
 		System.out.println("Hi," + this.player.getName());
 		if (!player.getPrizeList().isEmpty()) {
@@ -249,6 +243,59 @@ public class Game {
 		hold();
 	}
 
+	/**
+	 * Display the help information
+	 */
+	private void displayGameHelp() {
+		System.out.println("Here is some useful information!");
+		System.out
+				.println("First,U will have to create a new player before you begin the game."
+						+ Tools.SEPARATOR);
+		System.out.println("And here is the prize list!" + Tools.SEPARATOR);
+		System.out.println(constructPrizes());
+		hold();
+	}
+
+	/**
+	 * Construct an String contain a "table" shows all the information about the
+	 * prize that the machine can give out.
+	 * 
+	 * @return One single String contains all the prizes.
+	 */
+	private String constructPrizes() {
+
+		String p = "Number Generated" + "	" + "Prize is" + "	" + "Prize Worth"
+				+ "	" + "Cost to player" + Tools.SEPARATOR;
+		for (Prize prize : systemPrizeList) {
+			p = p + (systemPrizeList.indexOf(prize) + 1) + "			"
+					+ prize.getName() + "		" + prize.getWorth() + "		"
+					+ prize.getCost() + Tools.SEPARATOR;
+		}
+		return p;
+	}
+
+	/**
+	 * Simply printout the Menu.
+	 */
+	private void showMenu() {
+		System.out.println("	Please choice an option:");
+		System.out.println("====================================");
+		System.out.println("(1) Set Up New Player");
+		System.out.println("(2) Guess A Prize");
+		System.out.println("(3) What Have I Won So Far?");
+		System.out.println("(4) Display Game Help");
+		System.out.println("(5) Exit Game");
+		System.out.println("====================================");
+		System.out.println("Choose an option :");
+	}
+
+	/**
+	 * Hold the program for some seconds. Basically used for player to read some
+	 * simply instructions.
+	 * 
+	 * @param delaytime
+	 *            The number of the second that U wanna hold for the player.
+	 */
 	private void delay(int delaytime) {
 		try {
 			Thread.sleep(delaytime * 1000);
@@ -257,9 +304,14 @@ public class Game {
 			Thread.currentThread().interrupt();
 		}
 	}
-	
+
+	/**
+	 * Hold the program until the user type any key. Basically used for player
+	 * to read some long instruction or other system output(such as game help in
+	 * this program).
+	 */
 	private void hold() {
-		System.out.println(Tools.SEPARATOR+"Press any key to continue....");
+		System.out.println(Tools.SEPARATOR + "Press any key to continue....");
 		console.nextLine();
 	}
 }
