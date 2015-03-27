@@ -9,11 +9,11 @@ I'm a beginer here, any suggestion is welcomed!
 My email : jacknimrodarcher@gmail.com
 
 
-###To-do list:
+To-do list:
 --------
 	improve formate
 
-###Done:
+Done:
 --------
 	prepare the Arraylist to store the information about the prize
 		there should be 2 lists
