@@ -201,17 +201,7 @@ public class Game {
 				.println("First,U will have to create a new player before you begin the game."+Tools.SEPARATOR);
 		System.out.println("And here is the prize list!"+Tools.SEPARATOR);
 		System.out.println(showPrizes());
-		System.out.println("Press any key to continue.");
-		console.nextLine();
-	}
-
-	private void delay(int delaytime) {
-		try {
-			Thread.sleep(delaytime * 1000);
-			// whether syso?
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
+		hold();
 	}
 
 	private void showMenu() {
@@ -256,5 +246,20 @@ public class Game {
 		else
 			System.out
 					.println("U must be kidding me, u haven't spent even 1 cent on me!");
+		hold();
+	}
+
+	private void delay(int delaytime) {
+		try {
+			Thread.sleep(delaytime * 1000);
+			// whether syso?
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+	}
+	
+	private void hold() {
+		System.out.println(Tools.SEPARATOR+"Press any key to continue....");
+		console.nextLine();
 	}
 }
