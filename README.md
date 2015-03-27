@@ -1,4 +1,5 @@
-# Java-Assignment-1
+#Java-Assignment-1
+========
 The java assignment 1
 
 This program is my first java program here at github!
@@ -8,11 +9,11 @@ I'm a beginer here, any suggestion is welcomed!
 My email : jacknimrodarcher@gmail.com
 
 
-To-do list:
+###To-do list:
 --------
 	improve formate
 
-done:
+###Done:
 --------
 	prepare the Arraylist to store the information about the prize
 		there should be 2 lists
