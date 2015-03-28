@@ -69,7 +69,6 @@ public class Game {
 			} catch (IllegalInputException e) {
 				System.out.println(e.getMessage());
 				delay(3);
-				continue;
 			}
 		}
 	}
@@ -213,8 +212,7 @@ public class Game {
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
 		}
-		player.setSpent(systemPrizeList.get(userGuess-1).getCost());// player.setSpent();//
-																		// spent++
+		player.setSpent(systemPrizeList.get(userGuess-1).getCost());// player.setSpent(); (spent++)
 
 	}
 
