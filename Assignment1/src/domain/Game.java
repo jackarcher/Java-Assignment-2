@@ -213,7 +213,7 @@ public class Game {
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
 		}
-		player.setSpent(systemPrizeList.get(systemGuess - 1).getCost());// player.setSpent();//
+		player.setSpent(systemPrizeList.get(userGuess-1).getCost());// player.setSpent();//
 																		// spent++
 
 	}
@@ -223,7 +223,7 @@ public class Game {
 	 * as his or her name, and the game status so far.
 	 */
 	private void showUsersInformation() {
-		System.out.println("Hi," + this.player.getName());
+		System.out.println("Dear," + this.player.getName()+",");
 		if (!player.getPrizeList().isEmpty()) {
 			System.out.print("So far, U have won: ");
 			int totalWorth = 0;
@@ -236,7 +236,7 @@ public class Game {
 			System.out.println("And U have spent $" + player.getSpent() + ".");
 		} else if (player.getSpent() != 0)
 			System.out
-					.println("Em...I know U have spent some money on me, but sometime it is your luck to blame, right?");
+					.println("Em...I know U have spent $"+player.getSpent()+" on me, but sometime it is your luck to blame, right?");
 		else
 			System.out
 					.println("U must be kidding me, u haven't spent even 1 cent on me!");
@@ -311,7 +311,7 @@ public class Game {
 	 * this program).
 	 */
 	private void hold() {
-		System.out.println(Tools.SEPARATOR + "Press any key to continue....");
+		System.out.println(Tools.SEPARATOR + "Press <Enter> to continue....");
 		console.nextLine();
 	}
 }
