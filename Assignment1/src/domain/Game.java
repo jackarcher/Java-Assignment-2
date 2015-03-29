@@ -43,7 +43,7 @@ public class Game {
 	 * the game hasn't start yet.
 	 */
 	public Game() {
-		this.player = new Player();
+		this.player = new Player(); //to be improve
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
 		this.systemPrizeList = new ArrayList<Prize>();
