@@ -43,7 +43,7 @@ public class Game {
 	 * the game hasn't start yet.
 	 */
 	public Game() {
-		this.player = new Player(); //to be improve
+		this.player = new Player(); // to be improve
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
 		this.systemPrizeList = new ArrayList<Prize>();
@@ -87,6 +87,7 @@ public class Game {
 		try {
 			choice = console.nextInt();
 		} catch (Exception e) {
+			console.nextLine();
 			throw new IllegalInputException("Please make choice using integer.");
 		}
 		/*
@@ -116,11 +117,12 @@ public class Game {
 				}
 			}
 			System.out.println("U really just wanna play with me,right?");
-			return;
+			System.exit(0);
 		case 2:
+			int systemGuess = luckyGuessGenerator.randomIntGenerator();
 			while (true) {
 				try {
-					guessPrize();
+					guessPrize(systemGuess);
 					break;
 				} catch (IllegalInputException e1) {
 					System.out.println(e1.getMessage());
@@ -136,6 +138,7 @@ public class Game {
 		case 5:
 			System.out.println("Hope U have enjoyed the game!");
 			System.exit(0);
+			break;
 		default:
 			throw new IllegalInputException(
 					"Please make choice using integer range 1 - 5.");
@@ -161,7 +164,6 @@ public class Game {
 		}
 	}
 
-	
 	/**
 	 * This method is used for actually "play" the guess game.
 	 * 
@@ -170,18 +172,19 @@ public class Game {
 	 *             input something else rather than an integer. User should then
 	 *             follow the instruction to do it over again.
 	 */
-	private void guessPrize() throws IllegalInputException {
+	private void guessPrize(int systemGuess) throws IllegalInputException {
 		/*
 		 * after the prizelist already done, all the things about 5 should be
 		 * change to prizelist.size()
 		 */
 		System.out.println("Now Guess it! Input an integer from 1 - 5.");
-		int systemGuess = luckyGuessGenerator.randomIntGenerator();
+		// int systemGuess = luckyGuessGenerator.randomIntGenerator();
 		System.out.println("The lucky number is:" + systemGuess); // test
 		int userGuess;
 		try {
 			userGuess = console.nextInt();
 		} catch (Exception e) {
+			console.nextLine();
 			throw new IllegalInputException("Please input interger ONLY!");
 		}
 		try {
@@ -209,10 +212,12 @@ public class Game {
 			System.out.println("You are lucky! beacause you've just win a "
 					+ systemPrizeList.get(systemGuess - 1).getName() + "!");
 			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// prize+=newprize
+			player.setWorth(systemPrizeList.get(systemGuess).getWorth());
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
 		}
-		player.setSpent(systemPrizeList.get(userGuess-1).getCost());// player.setSpent(); (spent++)
+		player.setSpent(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
+																		// (spent++)
 
 	}
 
@@ -221,20 +226,18 @@ public class Game {
 	 * as his or her name, and the game status so far.
 	 */
 	private void showUsersInformation() {
-		System.out.println("Dear," + this.player.getName()+",");
+		System.out.println("Dear," + this.player.getName() + ",");
 		if (!player.getPrizeList().isEmpty()) {
 			System.out.print("So far, U have won: ");
-			int totalWorth = 0;
 			for (Prize prize : player.getPrizeList()) {
-				totalWorth += prize.getWorth();
 				System.out.print(prize.getName() + " ");
 			}
 			System.out.println(".");
-			System.out.println("Total worth is $" + totalWorth + ".");
+			System.out.println("Total worth is $" + player.getWorth() + ".");
 			System.out.println("And U have spent $" + player.getSpent() + ".");
 		} else if (player.getSpent() != 0)
-			System.out
-					.println("Em...I know U have spent $"+player.getSpent()+" on me, but sometime it is your luck to blame, right?");
+			System.out.println("Em...I know U have spent $" + player.getSpent()
+					+ " on me, but sometime it is your luck to blame, right?");
 		else
 			System.out
 					.println("U must be kidding me, u haven't spent even 1 cent on me!");
