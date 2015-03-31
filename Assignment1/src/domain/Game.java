@@ -3,8 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import exceptions.IllegalInputException;
 import systemTools.Tools;
-import Exceptions.IllegalInputException;
 
 /**
  * This class refer to the game itself. As U can see, many method is actually
