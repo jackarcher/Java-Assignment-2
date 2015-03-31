@@ -33,6 +33,7 @@ public class Game {
 	 * systemPrizeList is an ArrayList contains all the prizes in this machine.
 	 */
 	private ArrayList<Prize> systemPrizeList;
+	private int range;
 	/**
 	 * Console is an object used for user input.
 	 */
@@ -43,7 +44,7 @@ public class Game {
 	 * the game hasn't start yet.
 	 */
 	public Game() {
-		this.player = new Player(); // to be improve
+		this.player = null; // to be improve
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
 		this.systemPrizeList = new ArrayList<Prize>();
@@ -54,6 +55,7 @@ public class Game {
 		systemPrizeList.add(new Prize("DVD", t * 10, t++));
 		systemPrizeList.add(new Prize("Mouse", t * 10, t++));
 		systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
+		this.range = systemPrizeList.size();
 	}
 
 	/**
@@ -101,7 +103,7 @@ public class Game {
 		 * player. However if U only wanna check the game rule, this would'n be
 		 * necessary.
 		 */
-		if ((choice == 2 || choice == 3) && player.getName().isEmpty()) {
+		if ((choice == 2 || choice == 3) && player == null) {
 			System.out.println("You will have to create a new player first!");
 			choice = 1;
 		}
@@ -158,7 +160,7 @@ public class Game {
 		if (temp.isEmpty())
 			throw new IllegalInputException("No one is NULL!");
 		else {
-			this.player.setName(temp);
+			player = new Player(temp);
 			System.out.println("Hi," + this.player.getName()
 					+ ". Welcome to the LUCKY VENDING MACHINE!!");
 		}
@@ -177,8 +179,8 @@ public class Game {
 		 * after the prizelist already done, all the things about 5 should be
 		 * change to prizelist.size()
 		 */
-		System.out.println("Now Guess it! Input an integer from 1 - 5.");
-		// int systemGuess = luckyGuessGenerator.randomIntGenerator();
+		System.out.println("Now Guess it! Input an integer from 1 - " + range
+				+ ".");
 		System.out.println("The lucky number is:" + systemGuess); // test
 		int userGuess;
 		try {
@@ -202,7 +204,7 @@ public class Game {
 	 */
 	private void compareGuess(int userGuess, int systemGuess)
 			throws IllegalInputException {
-		if (userGuess > 5 || userGuess < 1) {
+		if (userGuess > range || userGuess < 1) {
 			throw new IllegalInputException(
 					"Please guess a number with in the range");
 		}
