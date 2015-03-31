@@ -51,6 +51,7 @@ public class Player {
 	public Player(String name) {
 		this.name = name;
 		this.prizes = "";
+		this.prizeList = new ArrayList<Prize>();
 		this.worth = 0;
 		this.spent = 0;
 	}

@@ -33,6 +33,9 @@ public class Game {
 	 * systemPrizeList is an ArrayList contains all the prizes in this machine.
 	 */
 	private ArrayList<Prize> systemPrizeList;
+	/**
+	 * Range here means how many prizes here in this program.
+	 */
 	private int range;
 	/**
 	 * Console is an object used for user input.
@@ -55,6 +58,8 @@ public class Game {
 		systemPrizeList.add(new Prize("DVD", t * 10, t++));
 		systemPrizeList.add(new Prize("Mouse", t * 10, t++));
 		systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
+		systemPrizeList.add(new Prize("TestOne", t * 10, t++));
+
 		this.range = systemPrizeList.size();
 	}
 
@@ -121,7 +126,8 @@ public class Game {
 			System.out.println("U really just wanna play with me,right?");
 			System.exit(0);
 		case 2:
-			int systemGuess = luckyGuessGenerator.randomIntGenerator();
+			int systemGuess = luckyGuessGenerator.randomIntGenerator(range);
+			// also u can use no paramount one
 			while (true) {
 				try {
 					guessPrize(systemGuess);
@@ -252,43 +258,47 @@ public class Game {
 	private void displayGameHelp() {
 		System.out.println("Here is some useful information!");
 		System.out
-				.println("First,U will have to create a new player before you begin the game."
+				.println("First, U will have to create a new player before you begin the game."
 						+ Tools.SEPARATOR);
+		System.out
+				.println("Second, if U do something wrong, just follow the instruction");
 		System.out.println("And here is the prize list!" + Tools.SEPARATOR);
-		System.out.println(constructPrizes());
+		showPrizes();
 		hold();
 	}
 
 	/**
-	 * Construct an String contain a "table" shows all the information about the
-	 * prize that the machine can give out.
-	 * 
-	 * @return One single String contains all the prizes.
+	 * Show a "table" in which contains all the information about the prize that
+	 * the machine can give out.
 	 */
-	private String constructPrizes() {
-
-		String p = "Number Generated" + "	" + "Prize is" + "	" + "Prize Worth"
-				+ "	" + "Cost to player" + Tools.SEPARATOR;
+	private void showPrizes() {
+		/*
+		 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
+		 * format-example/
+		 */
+		System.out
+				.printf("|%17s|%12s|%12s|%15s|" + Tools.SEPARATOR,
+						"Number Generated", "Prize is", "Prize Worth",
+						"Cost to player");
+		int i = 1;
 		for (Prize prize : systemPrizeList) {
-			p = p + (systemPrizeList.indexOf(prize) + 1) + "			"
-					+ prize.getName() + "		" + prize.getWorth() + "		"
-					+ prize.getCost() + Tools.SEPARATOR;
+			System.out.printf("|%17d|%12s|%12d|%15d|" + Tools.SEPARATOR, i++,
+					prize.getName(), prize.getWorth(), prize.getCost());
 		}
-		return p;
 	}
 
 	/**
 	 * Simply printout the Menu.
 	 */
 	private void showMenu() {
-		System.out.println("	Please choice an option:");
-		System.out.println("====================================");
+		System.out.printf("%16s"+Tools.SEPARATOR,"Menu");
+		System.out.println("===========================");
 		System.out.println("(1) Set Up New Player");
 		System.out.println("(2) Guess A Prize");
 		System.out.println("(3) What Have I Won So Far?");
 		System.out.println("(4) Display Game Help");
 		System.out.println("(5) Exit Game");
-		System.out.println("====================================");
+		System.out.println("===========================");
 		System.out.println("Choose an option :");
 	}
 
@@ -301,8 +311,8 @@ public class Game {
 	 */
 	private void delay(int delaytime) {
 		try {
+			System.out.println(Tools.SEPARATOR + "Back in 3 seconds.");
 			Thread.sleep(delaytime * 1000);
-			// whether syso?
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}

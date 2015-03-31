@@ -11,10 +11,11 @@ My email : jacknimrodarcher@gmail.com
 
 To-do list:
 --------
-	improve formate
+	Almost done here!
 
 Done:
 --------
+	improve formats
 	prepare the Arraylist to store the information about the prize
 		there should be 2 lists
 			First,the one store all kind of prize. This one should be kept by the object game.
