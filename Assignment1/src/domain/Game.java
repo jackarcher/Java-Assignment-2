@@ -229,7 +229,7 @@ public class Game {
 	 * as his or her name, and the game status so far.
 	 */
 	public void showUsersInformation() {
-		System.out.println("Dear," + this.player.getName() + ",");
+		System.out.println("Dear" + this.player.getName() + ",");
 		if (!player.getPrizeList().isEmpty()) {
 			System.out.print("So far, U have won: ");
 			for (Prize prize : player.getPrizeList()) {
@@ -251,12 +251,14 @@ public class Game {
 	 * Display the help information
 	 */
 	public void displayGameHelp() {
-		System.out.println("Here is some useful information!");
+		System.out
+				.println("Here is some useful information!" + Tools.SEPARATOR);
 		System.out
 				.println("First, U will have to create a new player before you begin the game."
 						+ Tools.SEPARATOR);
 		System.out
-				.println("Second, if U do something wrong, just follow the instruction");
+				.println("Second, if U do something wrong, just follow the instruction"
+						+ Tools.SEPARATOR);
 		System.out.println("And here is the prize list!" + Tools.SEPARATOR);
 		showPrizes();
 		hold();
