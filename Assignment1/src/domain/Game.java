@@ -212,7 +212,7 @@ public class Game {
 			System.out.println("You are lucky! beacause you've just win a "
 					+ systemPrizeList.get(systemGuess - 1).getName() + "!");
 			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// prize+=newprize
-			player.setWorth(systemPrizeList.get(systemGuess).getWorth());
+			player.setWorth(systemPrizeList.get(systemGuess - 1).getWorth());
 		} else {
 			System.out.println("Damn! You've just waste some money here!");
 		}
