@@ -47,7 +47,7 @@ public class Game {
 	 * the game hasn't start yet.
 	 */
 	public Game() {
-		this.player = null; // to be improve
+		this.player = null;
 		this.luckyGuessGenerator = new LuckyGuessGenerator();
 		this.console = new Scanner(System.in);
 		this.systemPrizeList = new ArrayList<Prize>();
@@ -103,13 +103,9 @@ public class Game {
 		 * page.
 		 */
 		console.nextLine();
-		/*
-		 * If u wanna actually PLAY the game. u will have to create a new
-		 * player. However if U only wanna check the game rule, this would'n be
-		 * necessary.
-		 */
 		if ((choice == 2 || choice == 3) && player == null) {
-			System.out.println("You will have to create a new player first!");
+			System.out.println("You will have to create a new player first!"
+					+ Tools.SEPARATOR);
 			choice = 1;
 		}
 		switchLoop: switch (choice) {
@@ -134,6 +130,7 @@ public class Game {
 					break;
 				} catch (IllegalInputException e1) {
 					System.out.println(e1.getMessage());
+					delay(3);
 				}
 			}
 			break;
@@ -160,7 +157,7 @@ public class Game {
 	 *            the player should be set.
 	 * @throws IllegalInputException
 	 */
-	private void setPlayer() throws IllegalInputException {
+	public void setPlayer() throws IllegalInputException {
 		System.out.println("Enter your name plz:");
 		String temp = console.nextLine();
 		if (temp.isEmpty())
@@ -169,6 +166,8 @@ public class Game {
 			player = new Player(temp);
 			System.out.println("Hi," + this.player.getName()
 					+ ". Welcome to the LUCKY VENDING MACHINE!!");
+			System.out.println("Loading...");
+			delay(2, false);
 		}
 	}
 
@@ -180,11 +179,7 @@ public class Game {
 	 *             input something else rather than an integer. User should then
 	 *             follow the instruction to do it over again.
 	 */
-	private void guessPrize(int systemGuess) throws IllegalInputException {
-		/*
-		 * after the prizelist already done, all the things about 5 should be
-		 * change to prizelist.size()
-		 */
+	public void guessPrize(int systemGuess) throws IllegalInputException {
 		System.out.println("Now Guess it! Input an integer from 1 - " + range
 				+ ".");
 		System.out.println("The lucky number is:" + systemGuess); // test
@@ -233,7 +228,7 @@ public class Game {
 	 * This method is used for show all the information about the player. Such
 	 * as his or her name, and the game status so far.
 	 */
-	private void showUsersInformation() {
+	public void showUsersInformation() {
 		System.out.println("Dear," + this.player.getName() + ",");
 		if (!player.getPrizeList().isEmpty()) {
 			System.out.print("So far, U have won: ");
@@ -255,7 +250,7 @@ public class Game {
 	/**
 	 * Display the help information
 	 */
-	private void displayGameHelp() {
+	public void displayGameHelp() {
 		System.out.println("Here is some useful information!");
 		System.out
 				.println("First, U will have to create a new player before you begin the game."
@@ -291,7 +286,7 @@ public class Game {
 	 * Simply printout the Menu.
 	 */
 	private void showMenu() {
-		System.out.printf("%16s"+Tools.SEPARATOR,"Menu");
+		System.out.printf("%16s" + Tools.SEPARATOR, "Menu");
 		System.out.println("===========================");
 		System.out.println("(1) Set Up New Player");
 		System.out.println("(2) Guess A Prize");
@@ -310,8 +305,30 @@ public class Game {
 	 *            The number of the second that U wanna hold for the player.
 	 */
 	private void delay(int delaytime) {
+		System.out.println(Tools.SEPARATOR + "Back in " + delaytime
+				+ " seconds.");
 		try {
-			System.out.println(Tools.SEPARATOR + "Back in 3 seconds.");
+			Thread.sleep(delaytime * 1000);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	/**
+	 * Same as method delay(int), but people can decided whether to give out the
+	 * instruction.
+	 * 
+	 * @param delaytime
+	 *            The number of the second that U wanna hold for the player.
+	 * @param flag
+	 *            Being true to give out the instruction
+	 */
+	private void delay(int delaytime, boolean flag) {
+		if (flag) {
+			System.out.println(Tools.SEPARATOR + "Back in " + delaytime
+					+ " seconds.");
+		}
+		try {
 			Thread.sleep(delaytime * 1000);
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
