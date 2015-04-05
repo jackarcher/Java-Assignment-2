@@ -91,7 +91,7 @@ public class Player {
 	 *            The new prizes that should be ADDED to the prizes.
 	 */
 	public void setPrizes(String prizes) {
-		this.prizes = this.prizes + " " + prizes;
+		this.prizes = this.prizes + prizes + " ";
 	}
 
 	/**
