@@ -116,7 +116,7 @@ public class Game {
 					break switchLoop;
 				} catch (IllegalInputException e) {
 					System.out.println(e.getMessage());
-					delay(3);
+					delay(2);
 				}
 			}
 			System.out.println("U really just wanna play with me,right?");
@@ -130,7 +130,7 @@ public class Game {
 					break;
 				} catch (IllegalInputException e1) {
 					System.out.println(e1.getMessage());
-					delay(3);
+					delay(2);
 				}
 			}
 			break;
@@ -179,7 +179,7 @@ public class Game {
 	 *             input something else rather than an integer. User should then
 	 *             follow the instruction to do it over again.
 	 */
-	public void inputGuess(int systemGuess) throws IllegalInputException {
+	private void inputGuess(int systemGuess) throws IllegalInputException {
 		System.out.println("Now Guess it! Input an integer from 1 - " + range
 				+ ".");
 		System.out.println("The lucky number is:" + systemGuess); // test
@@ -210,9 +210,10 @@ public class Game {
 			System.out.println("You are lucky! beacause you've just win a "
 					+ systemPrizeList.get(systemGuess - 1).getName() + "!");
 			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// prize+=newprize
+			player.setPrizes(systemPrizeList.get(systemGuess-1).getName());
 			player.setWorth(systemPrizeList.get(systemGuess - 1).getWorth());
 		} else {
-			System.out.println("Damn! You've just waste some money here!");
+			System.out.println("Damn! You've just waste $"+userGuess+" here!");
 		}
 		player.setSpent(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
 																		// (spent++)
@@ -222,7 +223,7 @@ public class Game {
 	 * This method is used for show all the information about the player. Such
 	 * as his or her name, and the game status so far.
 	 */
-	public void showUsersInformation() {
+	private void showUsersInformation() {
 		System.out.println("Dear" + this.player.getName() + ",");
 		if (!player.getPrizeList().isEmpty()) {
 			System.out.print("So far, U have won: ");
@@ -276,10 +277,9 @@ public class Game {
 		 */
 		System.out.printf(format, "Number Generated", "Prize is",
 				"Prize Worth", "Cost to player");
-		int i = 1;
 		for (Prize prize : systemPrizeList) {
-			System.out.printf(format, i++, prize.getName(), prize.getWorth(),
-					prize.getCost());
+			System.out.printf(format, systemPrizeList.indexOf(prize) + 1,
+					prize.getName(), prize.getWorth(), prize.getCost());
 		}
 	}
 
@@ -287,14 +287,14 @@ public class Game {
 	 * Simply printout the Menu.
 	 */
 	private void showMenu() {
-		System.out.printf("%16s" + Tools.SEPARATOR, "Menu");
-		System.out.println("===========================");
-		System.out.println("(1) Set Up New Player");
-		System.out.println("(2) Guess A Prize");
-		System.out.println("(3) What Have I Won So Far?");
-		System.out.println("(4) Display Game Help");
-		System.out.println("(5) Exit Game");
-		System.out.println("===========================");
+		System.out.printf("%18s" + Tools.SEPARATOR, "Menu");
+		System.out.println("===============================");
+		System.out.println("  (1) Set Up New Player");
+		System.out.println("  (2) Guess A Prize");
+		System.out.println("  (3) What Have I Won So Far?");
+		System.out.println("  (4) Display Game Help");
+		System.out.println("  (5) Exit Game");
+		System.out.println("===============================");
 		System.out.println("Choose an option :");
 	}
 
