@@ -3,8 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import exceptions.IllegalInputException;
 import systemTools.Tools;
+import exceptions.IllegalInputException;
 
 /**
  * This class refer to the game itself. As U can see, many method is actually
@@ -59,7 +59,7 @@ public class Game {
 		systemPrizeList.add(new Prize("Mouse", t * 10, t++));
 		systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
 		systemPrizeList.add(new Prize("TestOne", t * 10, t++));
-
+		systemPrizeList.add(new Prize("asdfasdfsdafsdafasdf", t * 10, t++));
 		this.range = systemPrizeList.size();
 	}
 
@@ -126,7 +126,7 @@ public class Game {
 			// also u can use no paramount one
 			while (true) {
 				try {
-					guessPrize(systemGuess);
+					inputGuess(systemGuess);
 					break;
 				} catch (IllegalInputException e1) {
 					System.out.println(e1.getMessage());
@@ -179,7 +179,7 @@ public class Game {
 	 *             input something else rather than an integer. User should then
 	 *             follow the instruction to do it over again.
 	 */
-	public void guessPrize(int systemGuess) throws IllegalInputException {
+	public void inputGuess(int systemGuess) throws IllegalInputException {
 		System.out.println("Now Guess it! Input an integer from 1 - " + range
 				+ ".");
 		System.out.println("The lucky number is:" + systemGuess); // test
@@ -190,11 +190,11 @@ public class Game {
 			console.nextLine();
 			throw new IllegalInputException("Please input interger ONLY!");
 		}
-		try {
-			compareGuess(userGuess, systemGuess);
-		} catch (IllegalInputException ex) {
-			throw ex;
+		if (userGuess > range || userGuess < 1) {
+			throw new IllegalInputException(
+					"Please guess a number with in the range");
 		}
+		compareGuess(userGuess, systemGuess);
 	}
 
 	/**
@@ -203,12 +203,7 @@ public class Game {
 	 * @param userGuess
 	 * @param systemGuess
 	 */
-	private void compareGuess(int userGuess, int systemGuess)
-			throws IllegalInputException {
-		if (userGuess > range || userGuess < 1) {
-			throw new IllegalInputException(
-					"Please guess a number with in the range");
-		}
+	private void compareGuess(int userGuess, int systemGuess) {
 		System.out.println("Your guess is " + userGuess);
 		System.out.println("The lucky number is:" + systemGuess);
 		if (systemGuess == userGuess) {
@@ -221,7 +216,6 @@ public class Game {
 		}
 		player.setSpent(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
 																		// (spent++)
-
 	}
 
 	/**
@@ -269,18 +263,23 @@ public class Game {
 	 * the machine can give out.
 	 */
 	private void showPrizes() {
+		int longest = 0;
+		for (Prize prize : systemPrizeList) {
+			if (longest < prize.getName().length())
+				longest = prize.getName().length();
+		}
+		longest += 3;
+		String format = "|%17s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
 		/*
 		 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
 		 * format-example/
 		 */
-		System.out
-				.printf("|%17s|%12s|%12s|%15s|" + Tools.SEPARATOR,
-						"Number Generated", "Prize is", "Prize Worth",
-						"Cost to player");
+		System.out.printf(format, "Number Generated", "Prize is",
+				"Prize Worth", "Cost to player");
 		int i = 1;
 		for (Prize prize : systemPrizeList) {
-			System.out.printf("|%17d|%12s|%12d|%15d|" + Tools.SEPARATOR, i++,
-					prize.getName(), prize.getWorth(), prize.getCost());
+			System.out.printf(format, i++, prize.getName(), prize.getWorth(),
+					prize.getCost());
 		}
 	}
 
