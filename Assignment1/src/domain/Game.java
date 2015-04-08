@@ -58,11 +58,11 @@ public class Game {
 		systemPrizeList.add(new Prize("DVD", t * 10, t++));
 		systemPrizeList.add(new Prize("Mouse", t * 10, t++));
 		systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
-
 		// systemPrizeList.add(new Prize("TestOne", t * 10, t++));
-		// systemPrizeList.add(new
-		// Prize("This prize has a very very very very long name!", t * 10,
-		// t++));
+		// systemPrizeList
+		// .add(new Prize(
+		// "This prize has a very very very very long name!",
+		// t * 10, t++));
 		this.range = systemPrizeList.size();
 	}
 
@@ -97,7 +97,6 @@ public class Game {
 		try {
 			choice = console.nextInt();
 		} catch (Exception e) {
-			console.nextLine();
 			throw new IllegalInputException("Please make choice using integer.");
 		}
 		/*
@@ -105,7 +104,9 @@ public class Game {
 		 * skipped This line below is added for the reason mentioned by this
 		 * page.
 		 */
-		console.nextLine();
+		finally {
+			console.nextLine();
+		}
 		if ((choice == 2 || choice == 3) && player == null) {
 			System.out.println("You will have to create a new player first!"
 					+ Tools.SEPARATOR);
@@ -228,15 +229,44 @@ public class Game {
 	 * as his or her name, and the game status so far.
 	 */
 	private void showUsersInformation() {
-		System.out.println("Dear" + this.player.getName() + ",");
+		// System.out.println("Dear" + this.player.getName() + ",");
+		// if (!player.getPrizeList().isEmpty()) {
+		// System.out.print("So far, U have won: ");
+		// for (Prize prize : player.getPrizeList()) {
+		// System.out.print(prize.getName() + " ");
+		// }
+		// System.out.println(".");
+		// System.out.println("Total worth is $" + player.getWorth() + ".");
+		// System.out.println("And U have spent $" + player.getSpent() + ".");
+		// } else if (player.getSpent() != 0)
+		// System.out.println("Em...I know U have spent $" + player.getSpent()
+		// + " on me, but sometime it is your luck to blame, right?");
+		// else
+		// System.out
+		// .println("U must be kidding me, u haven't spent even 1 cent on me!");
+		// hold();
+		/**/
+		System.out.println("Dear" + this.player.getName() + ","
+				+ Tools.SEPARATOR);
+		System.out.println("So far, U have won: " + Tools.SEPARATOR);
 		if (!player.getPrizeList().isEmpty()) {
-			System.out.print("So far, U have won: ");
+			int longest = 0;
 			for (Prize prize : player.getPrizeList()) {
-				System.out.print(prize.getName() + " ");
+				if (longest < prize.getName().length())
+					longest = prize.getName().length();
 			}
-			System.out.println(".");
-			System.out.println("Total worth is $" + player.getWorth() + ".");
-			System.out.println("And U have spent $" + player.getSpent() + ".");
+			longest += 3;
+			String format = "|%5s|%" + longest + "s|%7s|%7s|" + Tools.SEPARATOR;
+			System.out.printf(format, "No", "Prize", " Worth", "Cost");
+			int i = 1;
+			for (Prize prize : player.getPrizeList()) {
+				System.out.printf(format, i++, prize.getName(),
+						prize.getWorth(), prize.getCost());
+			}
+			System.out.printf("|%5s|%" + longest + "s|%7s|%7s|"
+					+ Tools.SEPARATOR, " ", " ", " ", " ");
+			System.out.printf(format, "Total", " ", player.getWorth(),
+					player.getSpent());
 		} else if (player.getSpent() != 0)
 			System.out.println("Em...I know U have spent $" + player.getSpent()
 					+ " on me, but sometime it is your luck to blame, right?");
@@ -244,6 +274,7 @@ public class Game {
 			System.out
 					.println("U must be kidding me, u haven't spent even 1 cent on me!");
 		hold();
+
 	}
 
 	/**

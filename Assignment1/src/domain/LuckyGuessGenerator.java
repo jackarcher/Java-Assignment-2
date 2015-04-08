@@ -16,7 +16,7 @@ public class LuckyGuessGenerator {
 	 * @return a random integer value from 1 to 5.
 	 */
 	public int randomIntGenerator() {
-		return 1 + (int) (Math.random() * 4);
+		return 1 + (int) (Math.random() * 5);
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class LuckyGuessGenerator {
 	 * @return An integer from 1 to the max value you gave.
 	 */
 	public int randomIntGenerator(int maxvalue) {
-		return 1 + (int) (Math.random() * (maxvalue - 1));
+		return 1 + (int) (Math.random() * (maxvalue));
 	}
 
 }

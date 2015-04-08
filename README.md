@@ -8,13 +8,18 @@ I'm a beginer here, any suggestion is welcomed!
 
 My email : jacknimrodarcher@gmail.com
 
-
+Read me:
+--------
+	This program is for personal academic use ONLY, no one should use it for his or her assignment.
+	Any use of all or part of this program must be under my permission, as well as our tutor(s).
+	
 To-do list:
 --------
 	Almost done here!
 
 Done:
 --------
+	improve more output
 	improve formats
 	prepare the Arraylist to store the information about the prize
 		there should be 2 lists

@@ -9,5 +9,12 @@ public class Main {
 		// TODO Auto-generated method stub
 		Game game = new Game();
 		game.runMenu();
+//		LuckyGuessGenerator luckyGuessGenerator = new LuckyGuessGenerator();
+//		for (int i = 1; i <= 200; i++) {
+//			System.out.print(luckyGuessGenerator.randomIntGenerator(5)+" ");
+//			if (i%5==0) {
+//				System.out.println();
+//			}
+//		}
 	}
 }
