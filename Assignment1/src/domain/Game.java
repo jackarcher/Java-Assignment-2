@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import systemTools.Tools;
@@ -101,7 +102,8 @@ public class Game {
 		}
 		/*
 		 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
-		 * skipped This line below is added for the reason mentioned by this
+		 * skipped.
+		 * This line below is added for the reason mentioned by this
 		 * page.
 		 */
 		finally {
@@ -191,8 +193,10 @@ public class Game {
 		try {
 			userGuess = console.nextInt();
 		} catch (Exception e) {
-			console.nextLine();
 			throw new IllegalInputException("Please input interger ONLY!");
+		}
+		finally{
+			console.nextLine();
 		}
 		if (userGuess > range || userGuess < 1) {
 			throw new IllegalInputException(

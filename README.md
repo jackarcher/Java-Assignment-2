@@ -15,7 +15,7 @@ Read me:
 	
 To-do list:
 --------
-	Almost done here!
+	improve the output of method case3;
 
 Done:
 --------
