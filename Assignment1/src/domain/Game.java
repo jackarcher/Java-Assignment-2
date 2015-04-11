@@ -79,7 +79,7 @@ public class Game {
 				makeChoice();
 			} catch (IllegalInputException e) {
 				System.out.println(e.getMessage());
-				delay(3);
+				delay(2);
 			}
 		}
 	}
@@ -102,8 +102,7 @@ public class Game {
 		}
 		/*
 		 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
-		 * skipped.
-		 * This line below is added for the reason mentioned by this
+		 * skipped. This line below is added for the reason mentioned by this
 		 * page.
 		 */
 		finally {
@@ -122,7 +121,7 @@ public class Game {
 					break switchLoop;
 				} catch (IllegalInputException e) {
 					System.out.println(e.getMessage());
-					delay(2);
+					delay(1);
 				}
 			}
 			System.out.println("U really just wanna play with me,right?");
@@ -136,7 +135,7 @@ public class Game {
 					break;
 				} catch (IllegalInputException e1) {
 					System.out.println(e1.getMessage());
-					delay(2);
+					delay(1);
 				}
 			}
 			break;
@@ -173,7 +172,7 @@ public class Game {
 			System.out.println("Hi," + this.player.getName()
 					+ ". Welcome to the LUCKY VENDING MACHINE!!");
 			System.out.println("Loading...");
-			delay(2, false);
+			delay(1, false);
 		}
 	}
 
@@ -194,8 +193,7 @@ public class Game {
 			userGuess = console.nextInt();
 		} catch (Exception e) {
 			throw new IllegalInputException("Please input interger ONLY!");
-		}
-		finally{
+		} finally {
 			console.nextLine();
 		}
 		if (userGuess > range || userGuess < 1) {
@@ -223,9 +221,11 @@ public class Game {
 		} else {
 			System.out.println("Damn! You've just waste $" + userGuess
 					+ " here!");
+			player.setWaste(userGuess);
 		}
 		player.setSpent(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
 																		// (spent++)
+		hold();
 	}
 
 	/**
@@ -267,9 +267,10 @@ public class Game {
 				System.out.printf(format, i++, prize.getName(),
 						prize.getWorth(), prize.getCost());
 			}
-			System.out.printf("|%5s|%" + longest + "s|%7s|%7s|"
-					+ Tools.SEPARATOR, " ", " ", " ", " ");
-			System.out.printf(format, "Total", " ", player.getWorth(),
+			System.out.printf(format, "", "", "", "");
+			System.out.printf(format, "", "Waste", "", player.getWaste());
+			System.out.printf(format, "", "", "", "");
+			System.out.printf(format, "Total", "", player.getWorth(),
 					player.getSpent());
 		} else if (player.getSpent() != 0)
 			System.out.println("Em...I know U have spent $" + player.getSpent()
@@ -345,13 +346,7 @@ public class Game {
 	 *            The number of the second that U wanna hold for the player.
 	 */
 	private void delay(int delaytime) {
-		System.out.println(Tools.SEPARATOR + "Back in " + delaytime
-				+ " seconds.");
-		try {
-			Thread.sleep(delaytime * 1000);
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
+		delay(delaytime, true);
 	}
 
 	/**
@@ -366,7 +361,7 @@ public class Game {
 	private void delay(int delaytime, boolean flag) {
 		if (flag) {
 			System.out.println(Tools.SEPARATOR + "Back in " + delaytime
-					+ " seconds.");
+					+ " seconds." + Tools.SEPARATOR);
 		}
 		try {
 			Thread.sleep(delaytime * 1000);
@@ -381,7 +376,8 @@ public class Game {
 	 * this program).
 	 */
 	private void hold() {
-		System.out.println(Tools.SEPARATOR + "Press <Enter> to continue....");
+		System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
+				+ Tools.SEPARATOR);
 		console.nextLine();
 	}
 }

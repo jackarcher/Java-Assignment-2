@@ -30,6 +30,10 @@ public class Player {
 	 * The money that the player has spend.
 	 */
 	private int spent;
+	/**
+	 * The money that the player has waste;
+	 */
+	private int waste;
 
 	/**
 	 * Default constructor. May seldom be called.
@@ -40,6 +44,7 @@ public class Player {
 		this.prizeList = new ArrayList<Prize>();
 		this.worth = 0;
 		this.spent = 0;
+		this.waste = 0;
 	}
 
 	/**
@@ -54,6 +59,8 @@ public class Player {
 		this.prizeList = new ArrayList<Prize>();
 		this.worth = 0;
 		this.spent = 0;
+		this.waste = 0;
+
 	}
 
 	/**
@@ -130,7 +137,7 @@ public class Player {
 	 *            The money the player has just spent(NOT TOTAL).
 	 */
 	public void setSpent(int spent) {
-		this.spent = this.spent + spent;
+		this.spent += spent;
 	}
 
 	/**
@@ -140,6 +147,26 @@ public class Player {
 	 */
 	public ArrayList<Prize> getPrizeList() {
 		return prizeList;
+	}
+
+	/**
+	 * The getter of the field waste.
+	 * 
+	 * @return The money the player has waste.
+	 */
+	public int getWaste() {
+		return waste;
+	}
+
+	/**
+	 * The setter of the field waste. Only ADD the money the player has just
+	 * waste.
+	 * 
+	 * @param waste
+	 *            The money the player has just waste.
+	 */
+	public void setWaste(int waste) {
+		this.waste += waste;
 	}
 
 }
