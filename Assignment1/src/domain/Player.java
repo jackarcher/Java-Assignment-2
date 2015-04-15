@@ -29,7 +29,7 @@ public class Player {
 	/**
 	 * The money that the player has spend.
 	 */
-	private int spent;
+	private int cost;
 	/**
 	 * The money that the player has waste;
 	 */
@@ -43,7 +43,7 @@ public class Player {
 		this.prizes = "";
 		this.prizeList = new ArrayList<Prize>();
 		this.worth = 0;
-		this.spent = 0;
+		this.cost = 0;
 		this.waste = 0;
 	}
 
@@ -58,7 +58,7 @@ public class Player {
 		this.prizes = "";
 		this.prizeList = new ArrayList<Prize>();
 		this.worth = 0;
-		this.spent = 0;
+		this.cost = 0;
 		this.waste = 0;
 
 	}
@@ -125,19 +125,19 @@ public class Player {
 	 * 
 	 * @return The money the player has spent.
 	 */
-	public int getSpent() {
-		return spent;
+	public int getCost() {
+		return cost;
 	}
 
 	/**
 	 * The setter of the field spent. Only ADD the money the player has just
 	 * spent.
 	 * 
-	 * @param spent
+	 * @param cost
 	 *            The money the player has just spent(NOT TOTAL).
 	 */
-	public void setSpent(int spent) {
-		this.spent += spent;
+	public void setCost(int cost) {
+		this.cost += cost;
 	}
 
 	/**

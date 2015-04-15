@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import systemTools.Tools;
@@ -71,7 +70,7 @@ public class Game {
 	 * The menu first output the menu itself and then call the method
 	 * makeChoice() for user to choice an option.
 	 */
-	public void runMenu() {
+	public void play() {
 		System.out.println("Welcome to the Lucky Vending Machine");
 		while (true) {
 			showMenu();
@@ -111,7 +110,19 @@ public class Game {
 		if ((choice == 2 || choice == 3) && player == null) {
 			System.out.println("You will have to create a new player first!"
 					+ Tools.SEPARATOR);
-			choice = 1;
+			for (int i = 0; ; i++) {
+				try {
+					setPlayer();
+					break;
+				} catch (IllegalInputException e) {
+					System.out.println(e.getMessage());
+					delay(1);
+				}
+				if (i==2) {
+					System.out.println("U really just wanna play with me,right?");
+					System.exit(0);
+				}
+			}
 		}
 		switchLoop: switch (choice) {
 		case 1:
@@ -223,7 +234,7 @@ public class Game {
 					+ " here!");
 			player.setWaste(userGuess);
 		}
-		player.setSpent(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
+		player.setCost(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
 																		// (spent++)
 		hold();
 	}
@@ -252,8 +263,8 @@ public class Game {
 		/**/
 		System.out.println("Dear" + this.player.getName() + ","
 				+ Tools.SEPARATOR);
-		System.out.println("So far, U have won: " + Tools.SEPARATOR);
 		if (!player.getPrizeList().isEmpty()) {
+			System.out.println("So far, U have won: " + Tools.SEPARATOR);
 			int longest = 0;
 			for (Prize prize : player.getPrizeList()) {
 				if (longest < prize.getName().length())
@@ -271,9 +282,9 @@ public class Game {
 			System.out.printf(format, "", "Waste", "", player.getWaste());
 			System.out.printf(format, "", "", "", "");
 			System.out.printf(format, "Total", "", player.getWorth(),
-					player.getSpent());
-		} else if (player.getSpent() != 0)
-			System.out.println("Em...I know U have spent $" + player.getSpent()
+					player.getCost());
+		} else if (player.getCost() != 0)
+			System.out.println("Em...I know U have spent $" + player.getCost()
 					+ " on me, but sometime it is your luck to blame, right?");
 		else
 			System.out
@@ -365,6 +376,7 @@ public class Game {
 		}
 		try {
 			Thread.sleep(delaytime * 1000);
+			System.out.print('\u000C');
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
@@ -379,5 +391,6 @@ public class Game {
 		System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
 				+ Tools.SEPARATOR);
 		console.nextLine();
+		System.out.print('\u000C');
 	}
 }

@@ -15,10 +15,11 @@ Read me:
 	
 To-do list:
 --------
-	improve the output of method case3;
+	Finish the javadoc
 
 Done:
 --------
+	improve the output of method case3;
 	improve more output
 	improve formats
 	prepare the Arraylist to store the information about the prize
