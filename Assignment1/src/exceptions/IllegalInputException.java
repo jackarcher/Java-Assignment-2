@@ -2,11 +2,6 @@ package exceptions;
 
 public class IllegalInputException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7285392553071122611L;
-
 	public IllegalInputException() {
 		super();
 	}
@@ -27,5 +22,4 @@ public class IllegalInputException extends RuntimeException {
 	public IllegalInputException(Throwable cause) {
 		super(cause);
 	}
-
 }

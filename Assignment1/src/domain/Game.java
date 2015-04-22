@@ -58,7 +58,7 @@ public class Game {
 		systemPrizeList.add(new Prize("DVD", t * 10, t++));
 		systemPrizeList.add(new Prize("Mouse", t * 10, t++));
 		systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
-		// systemPrizeList.add(new Prize("TestOne", t * 10, t++));
+		systemPrizeList.add(new Prize("This one has a fucking long name", t * 10, t++));
 		// systemPrizeList
 		// .add(new Prize(
 		// "This prize has a very very very very long name!",
@@ -226,7 +226,7 @@ public class Game {
 		if (systemGuess == userGuess) {
 			System.out.println("You are lucky! beacause you've just win a "
 					+ systemPrizeList.get(systemGuess - 1).getName() + "!");
-			player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// prize+=newprize
+			player.getPrizeList().add(systemPrizeList.get(systemGuess-1));// prize+=newprize
 			player.setPrizes(systemPrizeList.get(systemGuess - 1).getName());
 			player.setWorth(systemPrizeList.get(systemGuess - 1).getWorth());
 		} else {
