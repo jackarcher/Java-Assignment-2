@@ -1,8 +1,6 @@
-#Java-Assignment-1
+#Java-Assignment-2
 ========
-The java assignment 1
-
-This program is my first java program here at github!
+The java assignment 2
 
 I'm a beginer here, any suggestion is welcomed!
 
@@ -15,10 +13,15 @@ Read me:
 	
 To-do list:
 --------
-	Finish the javadoc
+	still a lot to do...
 
-Done:
+done
 --------
+	New arraylist to player and update the constructor.
+
+Done in assignment1:
+--------
+	Finish the javadoc
 	improve the output of method case3;
 	improve more output
 	improve formats
