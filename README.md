@@ -11,13 +11,26 @@ Read me:
 	This program is for my personal academic use ONLY, no one should use it for his or her assignment.
 	Any use of all or part of this program must be under my permission, as well as our tutor(s).
 	
+	
+Question:
+--------
+	performing simple searches?
+	using program constructs such as repetitions & selections
+	
+
 To-do list:
 --------
-	still a lot to do...
-
+	more debug
+	ioStream
+	HD option
+	
+	
 done
 --------
+	little debug
+	method 3 & 4
 	New arraylist to player and update the constructor.
+
 
 Done in assignment1:
 --------

@@ -158,7 +158,7 @@ public class Game
 		displayLuckiest(3);
 		break;
 	    case 5:
-		showUsersInformation();
+		displayPlayersInformation();
 		break;
 	    case 6:
 		displayGameHelp();
@@ -174,6 +174,7 @@ public class Game
 
     private void displayLuckiest(int i)
     {
+	playerList.sortByPrize();
 	displayPlayersInformation(i, false);
     }
 
@@ -195,14 +196,19 @@ public class Game
     {
 	if (playerList.isEmpty())
 	    System.out.println("Sadly, no one has played with me Q.Q, would U please be the first?");
-	playerList.sortByPrize();
-	if (number > playerList.size())
+	// if display all the limit should be the size of the arraylist
+	if (flag)
 	    number = playerList.size();
-	for (int i = 0; true; i++)
+	// if not display all and number is longer than the limit
+	else if (number > playerList.size())
+	    number = playerList.size();
+
+	for (int i = 0; i < number; i++)
 	{
-	    System.out.println(playerList.getpListByPrize().get(i).toString());
-	    if (!flag && i >= number)
-		break;
+	    if (!flag)
+		System.out.println(playerList.getpListByPrize().get(i).toString());
+	    else
+		System.out.println(playerList.getpList().get(i).toString());
 	}
 	hold();
     }
