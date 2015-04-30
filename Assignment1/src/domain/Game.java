@@ -21,11 +21,8 @@ import exceptions.IllegalInputException;
  */
 public class Game
 {
-
-    ArrayList<Player> playerList;
-
     /**
-     * Player refer to the object indicates a player.
+     * Player refer to the object indicates a player right now.
      */
     private Player player;
 
@@ -46,6 +43,10 @@ public class Game
      * Console is an object used for user input.
      */
     private Scanner console;
+    /**
+     * 
+     */
+    private PlayerList playerList;
 
     /**
      * Default constructor for this class, the player has been set to null for
@@ -53,7 +54,7 @@ public class Game
      */
     public Game()
     {
-	this.playerList = new ArrayList<Player>();
+	this.playerList = new PlayerList();
 	this.player = null;
 	this.luckyGuessGenerator = new LuckyGuessGenerator();
 	this.console = new Scanner(System.in);
@@ -90,21 +91,13 @@ public class Game
 	}
     }
 
-    /**
-     * The method that use for make choice. Basically choice only (and should
-     * only) happens after the menu has been output, so this is a private method
-     * which only be called by the menu method.
-     * 
-     * @throws IllegalInputException
-     *             This exception happens when user input something other than
-     *             integer 1-5 and let people choice again.
-     */
-    private void makeChoice() throws IllegalInputException
+    public int input() throws IllegalInputException
     {
 	int choice;
 	try
 	{
 	    choice = console.nextInt();
+	    return choice;
 	} catch (Exception e)
 	{
 	    throw new IllegalInputException("Please make choice using integer.");
@@ -118,44 +111,30 @@ public class Game
 	{
 	    console.nextLine();
 	}
+    }
+
+    /**
+     * The method that use for make choice. Basically choice only (and should
+     * only) happens after the menu has been output, so this is a private method
+     * which only be called by the menu method.
+     * 
+     * @throws IllegalInputException
+     *             This exception happens when user input something other than
+     *             integer 1-5 and let people choice again.
+     */
+    private void makeChoice() throws IllegalInputException
+    {
+	int choice = input();
 	if ((choice == 2 || choice == 3) && player == null)
 	{
 	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
-	    for (int i = 0;; i++)
-	    {
-		try
-		{
-		    setPlayer();
-		    break;
-		} catch (IllegalInputException e)
-		{
-		    System.out.println(e.getMessage());
-		    delay(1);
-		}
-		if (i == 2)
-		{
-		    System.out.println("U really just wanna play with me,right?");
-		    System.exit(0);
-		}
-	    }
+	    setPlayer(3);
 	}
-	switchLoop: switch (choice)
+	switch (choice)
 	{
 	    case 1:
-		for (int i = 0; i < 3; i++)
-		{
-		    try
-		    {
-			setPlayer();
-			break switchLoop;
-		    } catch (IllegalInputException e)
-		    {
-			System.out.println(e.getMessage());
-			delay(1);
-		    }
-		}
-		System.out.println("U really just wanna play with me,right?");
-		System.exit(0);
+		setPlayer();
+		break;
 	    case 2:
 		int systemGuess = luckyGuessGenerator.randomIntGenerator(range);
 		// also u can use no paramount one
@@ -165,9 +144,9 @@ public class Game
 		    {
 			inputGuess(systemGuess);
 			break;
-		    } catch (IllegalInputException e1)
+		    } catch (IllegalInputException e)
 		    {
-			System.out.println(e1.getMessage());
+			System.out.println(e.getMessage());
 			delay(1);
 		    }
 		}
@@ -176,15 +155,66 @@ public class Game
 		showUsersInformation();
 		break;
 	    case 4:
-		displayGameHelp();
+		displayLuckiest(3);
 		break;
 	    case 5:
+		showUsersInformation();
+		break;
+	    case 6:
+		displayGameHelp();
+		break;
+	    case 7:
 		System.out.println("Hope U have enjoyed the game!");
 		System.exit(0);
 		break;
 	    default:
 		throw new IllegalInputException("Please make choice using integer range 1 - 5.");
 	}
+    }
+
+    private void displayLuckiest(int i)
+    {
+	displayPlayersInformation(i, false);
+    }
+
+    public void displayPlayersInformation()
+    {
+	displayPlayersInformation(26298090, true);
+    }
+
+    /**
+     * 
+     * @param number
+     *            The max number of players u wanna display
+     * @param flag
+     *            Reference whether u wanna display all players information.
+     *            Being true to display all. Being false to display only the
+     *            given number.
+     */
+    public void displayPlayersInformation(int number, boolean flag)
+    {
+	if (playerList.isEmpty())
+	    System.out.println("Sadly, no one has played with me Q.Q, would U please be the first?");
+	playerList.sortByPrize();
+	if (number > playerList.size())
+	    number = playerList.size();
+	for (int i = 0; true; i++)
+	{
+	    System.out.println(playerList.getpListByPrize().get(i).toString());
+	    if (!flag && i >= number)
+		break;
+	}
+	hold();
+    }
+
+    public void setPlayer()
+    {
+	setPlayer(26298090, true);
+    }
+
+    public void setPlayer(int x)
+    {
+	setPlayer(x, false);
     }
 
     /**
@@ -194,19 +224,32 @@ public class Game
      *            the player should be set.
      * @throws IllegalInputException
      */
-    public void setPlayer() throws IllegalInputException
+    public void setPlayer(int x, boolean flag)
     {
-	System.out.println("Enter your name plz:");
-	String temp = console.nextLine();
-	if (temp.isEmpty())
-	    throw new IllegalInputException("No one is NULL!");
-	else
+	for (int i = 0; true; i++)
 	{
-	    player = new Player(temp);
-	    System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
-	    System.out.println("Loading...");
-	    delay(1, false);
+	    if (!flag && i >= x)
+		break;
+	    System.out.println("Enter your name plz:");
+	    String temp = console.nextLine();
+	    if (temp.isEmpty())
+	    {
+		System.out.println("No one is NULL!");
+		delay(1);
+		System.out.print('\u000C');
+	    } else
+	    {
+		player = new Player(temp);
+		playerList.addPlayer(player);
+		System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
+		System.out.println("Loading...");
+		delay(1, false);
+		return;
+	    }
+
 	}
+	System.out.println("U really just wanna play with me,right?");
+	System.exit(0);
     }
 
     /**
@@ -271,23 +314,6 @@ public class Game
      */
     private void showUsersInformation()
     {
-	// System.out.println("Dear" + this.player.getName() + ",");
-	// if (!player.getPrizeList().isEmpty()) {
-	// System.out.print("So far, U have won: ");
-	// for (Prize prize : player.getPrizeList()) {
-	// System.out.print(prize.getName() + " ");
-	// }
-	// System.out.println(".");
-	// System.out.println("Total worth is $" + player.getWorth() + ".");
-	// System.out.println("And U have spent $" + player.getSpent() + ".");
-	// } else if (player.getSpent() != 0)
-	// System.out.println("Em...I know U have spent $" + player.getSpent()
-	// + " on me, but sometime it is your luck to blame, right?");
-	// else
-	// System.out
-	// .println("U must be kidding me, u haven't spent even 1 cent on me!");
-	// hold();
-	/**/
 	System.out.println("Dear" + this.player.getName() + "," + Tools.SEPARATOR);
 	if (!player.getPrizeList().isEmpty())
 	{
@@ -361,15 +387,17 @@ public class Game
      */
     private void showMenu()
     {
-	System.out.printf("  %18s" + Tools.SEPARATOR, "Menu");
-	System.out.println("  ===============================");
+	System.out.printf("  %24s" + Tools.SEPARATOR, "Menu");
+	System.out.println("  ============================================");
 	System.out.println("    (1) Set Up New Player");
 	System.out.println("    (2) Guess A Prize");
 	System.out.println("    (3) What Have I Won So Far?");
-	System.out.println("    (4) Display Game Help");
-	System.out.println("    (5) Exit Game");
-	System.out.println("  ===============================");
-	System.out.println("	Choose an option :");
+	System.out.println("    (4) Who are the top 3 luckiest players?");
+	System.out.println("    (5) Display all players’ statistics");
+	System.out.println("    (6) Display Game Help");
+	System.out.println("    (7) Exit Game");
+	System.out.println("  ============================================");
+	System.out.println("  Choose an option :");
     }
 
     /**

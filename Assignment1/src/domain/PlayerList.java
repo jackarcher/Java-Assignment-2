@@ -15,13 +15,14 @@ public class PlayerList
 	pList = new ArrayList<Player>();
 	pListByPrize = new ArrayList<Player>(pList);
     }
-    
-    public PlayerList(ArrayList<Player> pList)
-    {
-	super();
-	this.pList = pList;
-	pListByPrize = new ArrayList<Player>(pList);
-    }
+
+    // public PlayerList(ArrayList<Player> pList)
+    // {
+    // super();
+    // this.pList = pList;
+    // pListByPrize = new ArrayList<Player>(pList);
+    // }
+    // test use
 
     public boolean addPlayer(Player player)
     {
@@ -35,11 +36,20 @@ public class PlayerList
 
     public ArrayList<Player> getpList()
     {
-        return pList;
+	return pList;
     }
 
     public ArrayList<Player> getpListByPrize()
     {
-        return pListByPrize;
+	return pListByPrize;
+    }
+
+    public boolean isEmpty()
+    {
+	return pList.isEmpty();
+    }
+    
+    public int size(){
+	return pList.size();
     }
 }
