@@ -1,9 +1,16 @@
 package domain;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import systemTools.Tools;
+import comparator.SortForPrizeList;
 import exceptions.IllegalInputException;
 
 /**
@@ -48,25 +55,117 @@ public class Game
      */
     private PlayerList playerList;
 
+    private File prizeFile;
+
+    private AdminControl adminControl;
+
     /**
      * Default constructor for this class, the player has been set to null for
      * the game hasn't start yet.
      */
     public Game()
     {
-	this.playerList = new PlayerList();
-	this.player = null;
-	this.luckyGuessGenerator = new LuckyGuessGenerator();
-	this.console = new Scanner(System.in);
-	this.systemPrizeList = new ArrayList<Prize>();
-	// for further improve, here can be stored to a file.
-	int t = 1;
-	systemPrizeList.add(new Prize("Pen", t * 10, t++));
-	systemPrizeList.add(new Prize("Book", t * 10, t++));
-	systemPrizeList.add(new Prize("DVD", t * 10, t++));
-	systemPrizeList.add(new Prize("Mouse", t * 10, t++));
-	systemPrizeList.add(new Prize("Keyboard", t * 10, t++));
-	systemPrizeList.add(new Prize("This one has a fucking long name", t * 10, t++));
+	playerList = new PlayerList();
+	player = null;
+	luckyGuessGenerator = new LuckyGuessGenerator();
+	console = new Scanner(System.in);
+	systemPrizeList = new ArrayList<Prize>();
+	adminControl = new AdminControl();
+	prizeFile = new File("src" + File.separator + "prize.txt");
+	loadFile();
+    }
+
+    private void writeFile()
+    {
+	FileOutputStream fos = null;
+	StringBuffer sb = new StringBuffer();
+	for (Prize p : systemPrizeList)
+	{
+	    sb.append(p.toString());
+	}
+	byte[] b = sb.toString().getBytes();
+	try
+	{
+	    fos = new FileOutputStream(prizeFile);
+	    fos.write(b);
+	    System.out.println("Write to file successfully.");
+	    hold();
+	} catch (Exception e)
+	{
+	    e.printStackTrace();
+	} finally
+	{
+	    try
+	    {
+		fos.close();
+
+	    } catch (IOException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+    }
+
+    /**
+     * Load or reload the prize file.
+     */
+    private void loadFile()
+    {
+	FileInputStream fis = null;
+	StringBuffer sb = new StringBuffer();
+	try
+	{
+	    fis = new FileInputStream(prizeFile);
+	    byte[] b = new byte[fis.available()];
+	    fis.read(b);
+	    for (int i = 0; i < b.length; i++)
+	    {
+		sb.append((char) b[i]);
+	    }
+	    System.out.println("Read from file successfully");
+	    hold();
+	} catch (FileNotFoundException e)
+	{
+	    System.out.println("No such file");
+	    System.exit(0);
+	} catch (IOException e)
+	{
+	    // IO exception
+	    // to be improved
+	    e.printStackTrace();
+	} finally
+	{
+	    try
+	    {
+		fis.close();
+	    } catch (IOException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
+	if (sb.length() == 0)
+	    System.exit(0);
+
+	String[] eachPrize = sb.toString().split(Tools.SEPARATOR);
+	for (int i = 0; i < eachPrize.length; i++)
+	{
+	    String[] temp = eachPrize[i].split(",");
+	    if (temp.length == 3)
+	    {
+		systemPrizeList.add(new Prize(temp[0], Integer.parseInt(temp[1]), Integer.parseInt(temp[2])));
+	    }
+	}
+	Collections.sort(systemPrizeList, new SortForPrizeList());
+	for (int i = 1; i < systemPrizeList.size(); i++)
+	{
+	    if (systemPrizeList.get(i).getCost() == systemPrizeList.get(i - 1).getCost())
+	    {
+		System.out.println("Remove the same cost prize!" + Tools.SEPARATOR + "Detail:");
+		System.out.println(systemPrizeList.get(i).toString());
+		systemPrizeList.remove(i);
+	    }
+	}
 	this.range = systemPrizeList.size();
     }
 
@@ -91,7 +190,7 @@ public class Game
 	}
     }
 
-    public int input() throws IllegalInputException
+    private int input() throws IllegalInputException
     {
 	int choice;
 	try
@@ -100,7 +199,7 @@ public class Game
 	    return choice;
 	} catch (Exception e)
 	{
-	    throw new IllegalInputException("Please make choice using integer.");
+	    throw new IllegalInputException("Please using integer.");
 	}
 	/*
 	 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
@@ -167,18 +266,134 @@ public class Game
 		System.out.println("Hope U have enjoyed the game!");
 		System.exit(0);
 		break;
+	    case 26298090:
+		runAdmin();
+		break;
 	    default:
-		throw new IllegalInputException("Please make choice using integer range 1 - 5.");
+		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
 	}
     }
 
+    private void runAdmin()
+    {
+	while (true)
+	{
+	    adminControl.displayMenu();
+	    int choice = input();
+	    switch (choice)
+	    {
+		case 1:
+		    Prize input = inputPrize();
+		    if (input == null)
+		    {
+			break;
+		    }
+		    adminControl.addPrize(systemPrizeList, inputPrize());
+		    break;
+		case 2:
+		    adminControl.removePrize(systemPrizeList, inputRemove());
+		    break;
+		case 3:
+		    writeFile();
+		    break;
+		case 4:
+		    showPrizes();
+		    hold();
+		    break;
+		case 5:
+		    return;
+		case 6:
+		    System.exit(0);
+		default:
+		    System.out.println("Please make choice using integer range 1 - 6.");
+		    choice = input();
+		    break;
+	    }
+	}
+    }
+
+    private int inputRemove()
+    {
+	System.out.println("This is the Prize List");
+	for (int i = 0; i < systemPrizeList.size(); i++)
+	{
+	    System.out.println("No." + i + ". " + systemPrizeList.get(i).toString());
+	}
+	System.out.println(Tools.SEPARATOR + "Please input the one you wanna remove");
+	int result = 0;
+	while (true)
+	{
+	    try
+	    {
+		result = input();
+		return result;
+	    } catch (IllegalInputException e)
+	    {
+		System.out.println(e.getMessage());
+	    }
+	}
+    }
+
+    private Prize inputPrize()
+    {
+	String name;
+	int worth;
+	int cost;
+	while (true)
+	{
+	    try
+	    {
+		System.out.println("Please input the name of prize, input \"exit\" to quit");
+		name = console.nextLine();
+		if (name.isEmpty())
+		    throw new IllegalInputException("No prize is null");
+		if (name.compareTo("exit") == 0)
+		    return null;
+		worth = input();
+		System.out.println("Please input the cost of prize");
+		cost = input();
+		if (validateCost(cost))
+		    return new Prize(name, worth, cost);
+		else
+		    throw new RuntimeException("The cost U input has already exist.");
+	    } catch (Exception e)
+	    {
+		System.out.println("Validation fail." + Tools.SEPARATOR);
+		System.out.println("Detail:");
+		System.out.println(e.getMessage() + Tools.SEPARATOR);
+		System.out.println("Please do it again" + Tools.SEPARATOR);
+	    }
+	}
+    }
+
+    private boolean validateCost(int cost)
+    {
+	boolean flag = true;
+	for (Prize prize : systemPrizeList)
+	{
+	    if (cost == prize.getCost())
+	    {
+		flag = false;
+		break;
+	    }
+	}
+	return flag;
+    }
+
+    /**
+     * 
+     * @param i
+     */
     private void displayLuckiest(int i)
     {
 	playerList.sortByPrize();
 	displayPlayersInformation(i, false);
     }
 
-    public void displayPlayersInformation()
+    /**
+     * 
+     */
+    private void displayPlayersInformation()
     {
 	displayPlayersInformation(26298090, true);
     }
@@ -192,7 +407,7 @@ public class Game
      *            Being true to display all. Being false to display only the
      *            given number.
      */
-    public void displayPlayersInformation(int number, boolean flag)
+    private void displayPlayersInformation(int number, boolean flag)
     {
 	if (playerList.isEmpty())
 	    System.out.println("Sadly, no one has played with me Q.Q, would U please be the first?");
@@ -213,12 +428,12 @@ public class Game
 	hold();
     }
 
-    public void setPlayer()
+    private void setPlayer()
     {
 	setPlayer(26298090, true);
     }
 
-    public void setPlayer(int x)
+    private void setPlayer(int x)
     {
 	setPlayer(x, false);
     }
@@ -230,7 +445,7 @@ public class Game
      *            the player should be set.
      * @throws IllegalInputException
      */
-    public void setPlayer(int x, boolean flag)
+    private void setPlayer(int x, boolean flag)
     {
 	for (int i = 0; true; i++)
 	{

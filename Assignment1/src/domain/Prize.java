@@ -1,5 +1,7 @@
 package domain;
 
+import systemTools.Tools;
+
 /**
  * This class indicates every kind of prize that the user may win. However, this
  * class will used for every element used in PrizeList.
@@ -139,5 +141,12 @@ public class Prize {
 	 */
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+
+	@Override
+	public String toString()
+	{
+	    return name+","+worth+","+cost+Tools.SEPARATOR;
+//	    return "Prize [name = " + name + ", worth = " + worth + ", cost = " + cost + "]";
 	}
 }

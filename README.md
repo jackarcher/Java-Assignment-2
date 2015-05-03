@@ -21,12 +21,13 @@ Question:
 To-do list:
 --------
 	more debug
-	ioStream
-	HD option
-	
+	JavaDoc
+
 	
 done
 --------
+	ioStream
+	HD option
 	little debug
 	method 3 & 4
 	New arraylist to player and update the constructor.
