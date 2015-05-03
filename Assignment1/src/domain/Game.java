@@ -206,7 +206,7 @@ public class Game
 	for (int i = 0; i < number; i++)
 	{
 	    if (!flag)
-		System.out.println(playerList.getpListByPrize().get(i).toString());
+		System.out.println(playerList.getOrderedList().get(i).toString());
 	    else
 		System.out.println(playerList.getpList().get(i).toString());
 	}

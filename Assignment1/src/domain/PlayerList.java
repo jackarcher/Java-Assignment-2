@@ -5,51 +5,92 @@ import java.util.Collections;
 
 import comparator.ComparatorForPlayer;
 
+/**
+ * This class refer contains 2 ArrayList. One is a list contains players in the
+ * original order, while the other one contains players in other orders(after
+ * sort).
+ * 
+ * @author archer
+ *
+ */
 public class PlayerList
 {
+    /**
+     * The list in original order.
+     */
     private ArrayList<Player> pList;
-    private ArrayList<Player> pListByPrize;
+    /**
+     * The ordered(sorted) list.
+     */
+    private ArrayList<Player> OrderedList;
 
+    /**
+     * Default constructor, the ordered list is initialized by the pList.
+     */
     public PlayerList()
     {
 	pList = new ArrayList<Player>();
-	pListByPrize = new ArrayList<Player>(pList);
+	OrderedList = new ArrayList<Player>(pList);
     }
 
-    // public PlayerList(ArrayList<Player> pList)
-    // {
-    // super();
-    // this.pList = pList;
-    // pListByPrize = new ArrayList<Player>(pList);
-    // }
-    // test use
-
+    /**
+     * Similar to the add method in Arraylist.
+     * 
+     * @param player
+     *            The player should be added to the array.
+     * @return Whether the player added successfully, being true refers to
+     *         successful.
+     */
     public boolean addPlayer(Player player)
     {
-	return pList.add(player) && pListByPrize.add(player);
+	return pList.add(player) && OrderedList.add(player);
     }
 
-    public void sortByPrize()
+    /**
+     * The mutator to the field OrderedList.
+     * 
+     * @return The field OrderedList.
+     */
+    public ArrayList<Player> getOrderedList()
     {
-	Collections.sort(pListByPrize, new ComparatorForPlayer());
+	return OrderedList;
     }
 
+    /**
+     * The mutator to the field pList.
+     * 
+     * @return The field pList.
+     */
     public ArrayList<Player> getpList()
     {
 	return pList;
     }
 
-    public ArrayList<Player> getpListByPrize()
-    {
-	return pListByPrize;
-    }
-
+    /**
+     * Check if the "List" is empty.
+     * 
+     * @return True represents empty.
+     */
     public boolean isEmpty()
     {
 	return pList.isEmpty();
     }
-    
-    public int size(){
+
+    /**
+     * Get the number of elements the List contains.
+     * 
+     * @return the number of elements the List contains
+     */
+    public int size()
+    {
 	return pList.size();
+    }
+
+    /**
+     * Sort the ordered list by prize.
+     */
+    public void sortByPrize()
+    {
+	Collections.sort(OrderedList, new ComparatorForPlayer());
     }
 }

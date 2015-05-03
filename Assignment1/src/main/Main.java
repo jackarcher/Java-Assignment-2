@@ -1,7 +1,9 @@
 package main;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import systemTools.Tools;
 import domain.Game;
 import domain.Player;
 import domain.PlayerList;
@@ -12,8 +14,14 @@ public class Main
 
     public static void main(String[] args)
     {
-	 Game game = new Game();
-	 game.play();
+	System.out.println(File.separator);
+	
+	
+	File f = new File("src"+File.separator+"io.txt");
+	System.out.println(f.getAbsolutePath());
+	System.out.println(f.exists());
+//	 Game game = new Game();
+//	 game.play();
 //	ArrayList<Player> plist = new ArrayList<Player>();
 //	plist.add(new Player("player1"));
 //	plist.add(new Player("player2"));
