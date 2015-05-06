@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
 import systemTools.Tools;
 import comparator.SortForPrizeList;
@@ -46,16 +45,11 @@ public class Game
      * Range here means how many prizes here in this program.
      */
     private int range;
-    /**
-     * Console is an object used for user input.
-     */
-    private Scanner console;
+
     /**
      * 
      */
     private PlayerList playerList;
-
-    private File prizeFile;
 
     private AdminControl adminControl;
 
@@ -68,43 +62,12 @@ public class Game
 	playerList = new PlayerList();
 	player = null;
 	luckyGuessGenerator = new LuckyGuessGenerator();
-	console = new Scanner(System.in);
 	systemPrizeList = new ArrayList<Prize>();
-	adminControl = new AdminControl();
-	prizeFile = new File("prize.txt");
+	adminControl = new AdminControl(systemPrizeList);
 	loadFile();
     }
 
-    private void writeFile()
-    {
-	FileOutputStream fos = null;
-	StringBuffer sb = new StringBuffer();
-	for (Prize p : systemPrizeList)
-	{
-	    sb.append(p.toString());
-	}
-	byte[] b = sb.toString().getBytes();
-	try
-	{
-	    fos = new FileOutputStream(prizeFile);
-	    fos.write(b);
-	    System.out.println("Write to file successfully.");
-	    hold();
-	} catch (Exception e)
-	{
-	    e.printStackTrace();
-	} finally
-	{
-	    try
-	    {
-		fos.close();
-
-	    } catch (IOException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-    }
+    
 
     /**
      * Load or reload the prize file.
@@ -115,7 +78,7 @@ public class Game
 	StringBuffer sb = new StringBuffer();
 	try
 	{
-	    fis = new FileInputStream(prizeFile);
+	    fis = new FileInputStream(Tools.prizeFile);
 	    byte[] b = new byte[fis.available()];
 	    fis.read(b);
 	    for (int i = 0; i < b.length; i++)
@@ -123,7 +86,7 @@ public class Game
 		sb.append((char) b[i]);
 	    }
 	    System.out.println("Read from file successfully");
-	    hold();
+	    Tools.hold();
 	} catch (FileNotFoundException e)
 	{
 	    System.out.println("No such file");
@@ -188,30 +151,8 @@ public class Game
 	    } catch (IllegalInputException e)
 	    {
 		System.out.println(e.getMessage());
-		delay(2);
+		Tools.delay(2);
 	    }
-	}
-    }
-
-    private int input() throws IllegalInputException
-    {
-	int choice;
-	try
-	{
-	    choice = console.nextInt();
-	    return choice;
-	} catch (Exception e)
-	{
-	    throw new IllegalInputException("Please using integer.");
-	}
-	/*
-	 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
-	 * skipped. This line below is added for the reason mentioned by this
-	 * page.
-	 */
-	finally
-	{
-	    console.nextLine();
 	}
     }
 
@@ -226,7 +167,7 @@ public class Game
      */
     private void makeChoice() throws IllegalInputException
     {
-	int choice = input();
+	int choice = Tools.input();
 	if ((choice == 2 || choice == 3) && player == null)
 	{
 	    System.out.println("You will have to create a new player first!"
@@ -250,7 +191,7 @@ public class Game
 		    } catch (IllegalInputException e)
 		    {
 			System.out.println(e.getMessage());
-			delay(1);
+			Tools.delay(1);
 		    }
 		}
 		break;
@@ -272,7 +213,7 @@ public class Game
 		break;
 	    case 26298090:
 		System.out.print('\u000C');
-		runAdmin();
+		adminControl.runAdmin();
 		break;
 	    default:
 		throw new IllegalInputException(
@@ -280,121 +221,10 @@ public class Game
 	}
     }
 
-    private void runAdmin()
-    {
-	while (true)
-	{
-	    adminControl.displayMenu();
-	    int choice = input();
-	    switch (choice)
-	    {
-		case 1:
-		    Prize input = inputPrize();
-		    if (input == null)
-		    {
-			break;
-		    }
-		    adminControl.addPrize(systemPrizeList, input);
-		    hold();
-		    break;
-		case 2:
-		    adminControl.removePrize(systemPrizeList, inputRemove());
-		    hold();
-		    break;
-		case 3:
-		    writeFile();
-		    break;
-		case 4:
-		    showPrizes();
-		    hold();
-		    break;
-		case 5:
-		    System.out.print('\u000C');
-		    return;
-		case 6:
-		    System.exit(0);
-		default:
-		    System.out
-			    .println("Please make choice using integer range 1 - 6.");
-		    choice = input();
-		    break;
-	    }
-	}
-    }
+    
 
-    private int inputRemove()
-    {
-	System.out.println("This is the Prize List");
-	for (int i = 0; i < systemPrizeList.size(); i++)
-	{
-	    System.out.println("No." + i + ". "
-		    + systemPrizeList.get(i).toString());
-	}
-	System.out.println(Tools.SEPARATOR
-		+ "Please input the one you wanna remove");
-	int result = 0;
-	while (true)
-	{
-	    try
-	    {
-		result = input();
-		return result;
-	    } catch (IllegalInputException e)
-	    {
-		System.out.println(e.getMessage());
-	    }
-	}
-    }
 
-    private Prize inputPrize()
-    {
-	String name;
-	int worth;
-	int cost;
-	while (true)
-	{
-	    try
-	    {
-		System.out
-			.println("Please input the name of prize, input \"exit\" to quit");
-		name = console.nextLine();
-		if (name.isEmpty())
-		    throw new IllegalInputException("No prize is null");
-		if (name.compareTo("exit") == 0)
-		    return null;
-		System.out.println("Please input the worth of prize");
-		worth = input();
-		System.out.println("Please input the cost of prize");
-		cost = input();
-		if (validateCost(cost))
-		    return new Prize(name, worth, cost);
-		else
-		    throw new RuntimeException(
-			    "The cost U input has already exist.");
-	    } catch (Exception e)
-	    {
-		System.out.println("Validation fail." + Tools.SEPARATOR);
-		System.out.println("Detail:");
-		System.out.println(e.getMessage() + Tools.SEPARATOR);
-		System.out.println("Please do it again" + Tools.SEPARATOR);
-		continue;
-	    }
-	}
-    }
 
-    private boolean validateCost(int cost)
-    {
-	boolean flag = true;
-	for (Prize prize : systemPrizeList)
-	{
-	    if (cost == prize.getCost())
-	    {
-		flag = false;
-		break;
-	    }
-	}
-	return flag;
-    }
 
     /**
      * 
@@ -443,7 +273,7 @@ public class Game
 	    else
 		System.out.println(playerList.getpList().get(i).toString());
 	}
-	hold();
+	Tools.hold();
     }
 
     private void setPlayer()
@@ -470,11 +300,11 @@ public class Game
 	    if (!flag && i >= x)
 		break;
 	    System.out.println("Enter your name plz:");
-	    String temp = console.nextLine();
+	    String temp = Tools.console.nextLine();
 	    if (temp.isEmpty())
 	    {
 		System.out.println("No one is NULL!");
-		delay(1);
+		Tools.delay(1);
 		System.out.print('\u000C');
 	    } else
 	    {
@@ -483,7 +313,7 @@ public class Game
 		System.out.println("Hi," + this.player.getName()
 			+ ". Welcome to the LUCKY VENDING MACHINE!!");
 		System.out.println("Loading...");
-		delay(1, false);
+		Tools.delay(1, false);
 		return;
 	    }
 
@@ -508,13 +338,13 @@ public class Game
 	int userGuess;
 	try
 	{
-	    userGuess = console.nextInt();
+	    userGuess = Tools.console.nextInt();
 	} catch (Exception e)
 	{
 	    throw new IllegalInputException("Please input interger ONLY!");
 	} finally
 	{
-	    console.nextLine();
+	    Tools.console.nextLine();
 	}
 	if (userGuess > range || userGuess < 1)
 	{
@@ -549,7 +379,7 @@ public class Game
 	}
 	player.setCost(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
 	// (spent++)
-	hold();
+	Tools.hold();
     }
 
     /**
@@ -589,7 +419,7 @@ public class Game
 	else
 	    System.out
 		    .println("U must be kidding me, u haven't spent even 1 cent on me!");
-	hold();
+	Tools.hold();
 
     }
 
@@ -608,7 +438,7 @@ public class Game
 			+ Tools.SEPARATOR);
 	System.out.println("And here is the prize list!" + Tools.SEPARATOR);
 	showPrizes();
-	hold();
+	Tools.hold();
     }
 
     /**
@@ -649,61 +479,11 @@ public class Game
 	System.out.println("    (2) Guess A Prize");
 	System.out.println("    (3) What Have I Won So Far?");
 	System.out.println("    (4) Who are the top 3 luckiest players?");
-	System.out.println("    (5) Display all players's? statistics");
+	System.out.println("    (5) Display all players's statistics");
 	System.out.println("    (6) Display Game Help");
 	System.out.println("    (7) Exit Game");
 	System.out.println("  ============================================");
 	System.out.println("  Choose an option :");
     }
 
-    /**
-     * Hold the program for some seconds. Basically used for player to read some
-     * simply instructions.
-     * 
-     * @param delaytime
-     *            The number of the second that U wanna hold for the player.
-     */
-    private void delay(int delaytime)
-    {
-	delay(delaytime, true);
-    }
-
-    /**
-     * Same as method delay(int), but people can decided whether to give out the
-     * instruction.
-     * 
-     * @param delaytime
-     *            The number of the second that U wanna hold for the player.
-     * @param flag
-     *            Being true to give out the instruction
-     */
-    private void delay(int delaytime, boolean flag)
-    {
-	if (flag)
-	{
-	    System.out.println(Tools.SEPARATOR + "Back in " + delaytime
-		    + " seconds." + Tools.SEPARATOR);
-	}
-	try
-	{
-	    Thread.sleep(delaytime * 1000);
-	    System.out.print('\u000C');
-	} catch (InterruptedException ex)
-	{
-	    Thread.currentThread().interrupt();
-	}
-    }
-
-    /**
-     * Hold the program until the user type any key. Basically used for player
-     * to read some long instruction or other system output(such as game help in
-     * this program).
-     */
-    private void hold()
-    {
-	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
-		+ Tools.SEPARATOR);
-	console.nextLine();
-	System.out.print('\u000C');
-    }
 }
