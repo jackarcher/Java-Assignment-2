@@ -24,7 +24,7 @@ import exceptions.IllegalInputException;
  * that others can actually play the game.
  * 
  * @author archer
- *
+ * 
  */
 public class Game
 {
@@ -71,7 +71,7 @@ public class Game
 	console = new Scanner(System.in);
 	systemPrizeList = new ArrayList<Prize>();
 	adminControl = new AdminControl();
-	prizeFile = new File("src" + File.separator + "prize.txt");
+	prizeFile = new File("prize.txt");
 	loadFile();
     }
 
@@ -153,15 +153,18 @@ public class Game
 	    String[] temp = eachPrize[i].split(",");
 	    if (temp.length == 3)
 	    {
-		systemPrizeList.add(new Prize(temp[0], Integer.parseInt(temp[1]), Integer.parseInt(temp[2])));
+		systemPrizeList.add(new Prize(temp[0], Integer
+			.parseInt(temp[1]), Integer.parseInt(temp[2])));
 	    }
 	}
 	Collections.sort(systemPrizeList, new SortForPrizeList());
 	for (int i = 1; i < systemPrizeList.size(); i++)
 	{
-	    if (systemPrizeList.get(i).getCost() == systemPrizeList.get(i - 1).getCost())
+	    if (systemPrizeList.get(i).getCost() == systemPrizeList.get(i - 1)
+		    .getCost())
 	    {
-		System.out.println("Remove the same cost prize!" + Tools.SEPARATOR + "Detail:");
+		System.out.println("Remove the same cost prize!"
+			+ Tools.SEPARATOR + "Detail:");
 		System.out.println(systemPrizeList.get(i).toString());
 		systemPrizeList.remove(i);
 	    }
@@ -226,7 +229,8 @@ public class Game
 	int choice = input();
 	if ((choice == 2 || choice == 3) && player == null)
 	{
-	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
+	    System.out.println("You will have to create a new player first!"
+		    + Tools.SEPARATOR);
 	    setPlayer(3);
 	}
 	switch (choice)
@@ -267,10 +271,12 @@ public class Game
 		System.exit(0);
 		break;
 	    case 26298090:
+		System.out.print('\u000C');
 		runAdmin();
 		break;
 	    default:
-		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
+		throw new IllegalInputException(
+			"Please make choice using integer range 1 - 7.");
 	}
     }
 
@@ -288,10 +294,12 @@ public class Game
 		    {
 			break;
 		    }
-		    adminControl.addPrize(systemPrizeList, inputPrize());
+		    adminControl.addPrize(systemPrizeList, input);
+		    hold();
 		    break;
 		case 2:
 		    adminControl.removePrize(systemPrizeList, inputRemove());
+		    hold();
 		    break;
 		case 3:
 		    writeFile();
@@ -301,11 +309,13 @@ public class Game
 		    hold();
 		    break;
 		case 5:
+		    System.out.print('\u000C');
 		    return;
 		case 6:
 		    System.exit(0);
 		default:
-		    System.out.println("Please make choice using integer range 1 - 6.");
+		    System.out
+			    .println("Please make choice using integer range 1 - 6.");
 		    choice = input();
 		    break;
 	    }
@@ -317,9 +327,11 @@ public class Game
 	System.out.println("This is the Prize List");
 	for (int i = 0; i < systemPrizeList.size(); i++)
 	{
-	    System.out.println("No." + i + ". " + systemPrizeList.get(i).toString());
+	    System.out.println("No." + i + ". "
+		    + systemPrizeList.get(i).toString());
 	}
-	System.out.println(Tools.SEPARATOR + "Please input the one you wanna remove");
+	System.out.println(Tools.SEPARATOR
+		+ "Please input the one you wanna remove");
 	int result = 0;
 	while (true)
 	{
@@ -343,25 +355,29 @@ public class Game
 	{
 	    try
 	    {
-		System.out.println("Please input the name of prize, input \"exit\" to quit");
+		System.out
+			.println("Please input the name of prize, input \"exit\" to quit");
 		name = console.nextLine();
 		if (name.isEmpty())
 		    throw new IllegalInputException("No prize is null");
 		if (name.compareTo("exit") == 0)
 		    return null;
+		System.out.println("Please input the worth of prize");
 		worth = input();
 		System.out.println("Please input the cost of prize");
 		cost = input();
 		if (validateCost(cost))
 		    return new Prize(name, worth, cost);
 		else
-		    throw new RuntimeException("The cost U input has already exist.");
+		    throw new RuntimeException(
+			    "The cost U input has already exist.");
 	    } catch (Exception e)
 	    {
 		System.out.println("Validation fail." + Tools.SEPARATOR);
 		System.out.println("Detail:");
 		System.out.println(e.getMessage() + Tools.SEPARATOR);
 		System.out.println("Please do it again" + Tools.SEPARATOR);
+		continue;
 	    }
 	}
     }
@@ -410,7 +426,8 @@ public class Game
     private void displayPlayersInformation(int number, boolean flag)
     {
 	if (playerList.isEmpty())
-	    System.out.println("Sadly, no one has played with me Q.Q, would U please be the first?");
+	    System.out
+		    .println("Sadly, no one has played with me Q.Q, would U please be the first?");
 	// if display all the limit should be the size of the arraylist
 	if (flag)
 	    number = playerList.size();
@@ -421,7 +438,8 @@ public class Game
 	for (int i = 0; i < number; i++)
 	{
 	    if (!flag)
-		System.out.println(playerList.getOrderedList().get(i).toString());
+		System.out.println(playerList.getOrderedList().get(i)
+			.toString());
 	    else
 		System.out.println(playerList.getpList().get(i).toString());
 	}
@@ -462,7 +480,8 @@ public class Game
 	    {
 		player = new Player(temp);
 		playerList.addPlayer(player);
-		System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
+		System.out.println("Hi," + this.player.getName()
+			+ ". Welcome to the LUCKY VENDING MACHINE!!");
 		System.out.println("Loading...");
 		delay(1, false);
 		return;
@@ -483,7 +502,8 @@ public class Game
      */
     private void inputGuess(int systemGuess) throws IllegalInputException
     {
-	System.out.println("Now Guess it! Input an integer from 1 - " + range + ".");
+	System.out.println("Now Guess it! Input an integer from 1 - " + range
+		+ ".");
 	System.out.println("The lucky number is:" + systemGuess); // test
 	int userGuess;
 	try
@@ -498,7 +518,8 @@ public class Game
 	}
 	if (userGuess > range || userGuess < 1)
 	{
-	    throw new IllegalInputException("Please guess a number with in the range");
+	    throw new IllegalInputException(
+		    "Please guess a number with in the range");
 	}
 	compareGuess(userGuess, systemGuess);
     }
@@ -515,17 +536,19 @@ public class Game
 	System.out.println("The lucky number is:" + systemGuess);
 	if (systemGuess == userGuess)
 	{
-	    System.out.println("You are lucky! beacause you've just win a " + systemPrizeList.get(systemGuess - 1).getName() + "!");
+	    System.out.println("You are lucky! beacause you've just win a "
+		    + systemPrizeList.get(systemGuess - 1).getName() + "!");
 	    player.getPrizeList().add(systemPrizeList.get(systemGuess - 1));// prize+=newprize
 	    player.setPrizes(systemPrizeList.get(systemGuess - 1).getName());
 	    player.setWorth(systemPrizeList.get(systemGuess - 1).getWorth());
 	} else
 	{
-	    System.out.println("Damn! You've just waste $" + userGuess + " here!");
+	    System.out.println("Damn! You've just waste $" + userGuess
+		    + " here!");
 	    player.setWaste(userGuess);
 	}
 	player.setCost(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
-								     // (spent++)
+	// (spent++)
 	hold();
     }
 
@@ -535,7 +558,8 @@ public class Game
      */
     private void showUsersInformation()
     {
-	System.out.println("Dear" + this.player.getName() + "," + Tools.SEPARATOR);
+	System.out.println("Dear" + this.player.getName() + ","
+		+ Tools.SEPARATOR);
 	if (!player.getPrizeList().isEmpty())
 	{
 	    System.out.println("So far, U have won: " + Tools.SEPARATOR);
@@ -551,16 +575,20 @@ public class Game
 	    int i = 1;
 	    for (Prize prize : player.getPrizeList())
 	    {
-		System.out.printf(format, i++, prize.getName(), prize.getWorth(), prize.getCost());
+		System.out.printf(format, i++, prize.getName(),
+			prize.getWorth(), prize.getCost());
 	    }
 	    System.out.printf(format, "", "", "", "");
 	    System.out.printf(format, "", "Waste", "", player.getWaste());
 	    System.out.printf(format, "", "", "", "");
-	    System.out.printf(format, "Total", "", player.getWorth(), player.getCost());
+	    System.out.printf(format, "Total", "", player.getWorth(),
+		    player.getCost());
 	} else if (player.getCost() != 0)
-	    System.out.println("Em...I know U have spent $" + player.getCost() + " on me, but sometime it is your luck to blame, right?");
+	    System.out.println("Em...I know U have spent $" + player.getCost()
+		    + " on me, but sometime it is your luck to blame, right?");
 	else
-	    System.out.println("U must be kidding me, u haven't spent even 1 cent on me!");
+	    System.out
+		    .println("U must be kidding me, u haven't spent even 1 cent on me!");
 	hold();
 
     }
@@ -570,9 +598,14 @@ public class Game
      */
     public void displayGameHelp()
     {
-	System.out.println("Here is some useful information!" + Tools.SEPARATOR);
-	System.out.println("First, U will have to create a new player before you begin the game." + Tools.SEPARATOR);
-	System.out.println("Second, if U do something wrong, just follow the instruction" + Tools.SEPARATOR);
+	System.out
+		.println("Here is some useful information!" + Tools.SEPARATOR);
+	System.out
+		.println("First, U will have to create a new player before you begin the game."
+			+ Tools.SEPARATOR);
+	System.out
+		.println("Second, if U do something wrong, just follow the instruction"
+			+ Tools.SEPARATOR);
 	System.out.println("And here is the prize list!" + Tools.SEPARATOR);
 	showPrizes();
 	hold();
@@ -596,10 +629,12 @@ public class Game
 	 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
 	 * format-example/
 	 */
-	System.out.printf(format, "Number Generated", "Prize is", "Prize Worth", "Cost to player");
+	System.out.printf(format, "Number Generated", "Prize is",
+		"Prize Worth", "Cost to player");
 	for (Prize prize : systemPrizeList)
 	{
-	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1, prize.getName(), prize.getWorth(), prize.getCost());
+	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1,
+		    prize.getName(), prize.getWorth(), prize.getCost());
 	}
     }
 
@@ -614,7 +649,7 @@ public class Game
 	System.out.println("    (2) Guess A Prize");
 	System.out.println("    (3) What Have I Won So Far?");
 	System.out.println("    (4) Who are the top 3 luckiest players?");
-	System.out.println("    (5) Display all players’ statistics");
+	System.out.println("    (5) Display all players's? statistics");
 	System.out.println("    (6) Display Game Help");
 	System.out.println("    (7) Exit Game");
 	System.out.println("  ============================================");
@@ -646,7 +681,8 @@ public class Game
     {
 	if (flag)
 	{
-	    System.out.println(Tools.SEPARATOR + "Back in " + delaytime + " seconds." + Tools.SEPARATOR);
+	    System.out.println(Tools.SEPARATOR + "Back in " + delaytime
+		    + " seconds." + Tools.SEPARATOR);
 	}
 	try
 	{
@@ -665,7 +701,8 @@ public class Game
      */
     private void hold()
     {
-	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...." + Tools.SEPARATOR);
+	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
+		+ Tools.SEPARATOR);
 	console.nextLine();
 	System.out.print('\u000C');
     }
