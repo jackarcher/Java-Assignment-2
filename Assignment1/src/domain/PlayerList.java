@@ -3,6 +3,8 @@ package domain;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.xml.bind.ValidationException;
+
 import comparator.ComparatorForPlayer;
 
 /**
@@ -18,7 +20,7 @@ public class PlayerList
     /**
      * The list in original order.
      */
-    private ArrayList<Player> pList;
+    private ArrayList<Player> playerList;
     /**
      * The ordered(sorted) list.
      */
@@ -29,8 +31,8 @@ public class PlayerList
      */
     public PlayerList()
     {
-	pList = new ArrayList<Player>();
-	OrderedList = new ArrayList<Player>(pList);
+	playerList = new ArrayList<Player>();
+	OrderedList = new ArrayList<Player>(playerList);
     }
 
     /**
@@ -40,15 +42,16 @@ public class PlayerList
      *            The player should be added to the array.
      * @return Whether the player added successfully, being true refers to
      *         successful.
+     * @throws ValidationException 
      */
-    public boolean addPlayer(Player player)
+    public boolean addPlayer(Player player) throws ValidationException
     {
-	for (Player eachPlayer : pList)
+	for (Player eachPlayer : playerList)
 	{
 	    if(player.getName().equalsIgnoreCase(eachPlayer.getName()))
-		return false;
+		throw new ValidationException("Player already exist!");
 	}
-	return pList.add(player) && OrderedList.add(player);
+	return playerList.add(player) && OrderedList.add(player);
     }
 
     /**
@@ -66,9 +69,9 @@ public class PlayerList
      * 
      * @return The field pList.
      */
-    public ArrayList<Player> getpList()
+    public ArrayList<Player> getPlayerList()
     {
-	return pList;
+	return playerList;
     }
 
     /**
@@ -78,7 +81,7 @@ public class PlayerList
      */
     public boolean isEmpty()
     {
-	return pList.isEmpty();
+	return playerList.isEmpty();
     }
 
     /**
@@ -88,7 +91,7 @@ public class PlayerList
      */
     public int size()
     {
-	return pList.size();
+	return playerList.size();
     }
 
     /**

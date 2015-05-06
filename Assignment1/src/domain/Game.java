@@ -87,11 +87,11 @@ public class Game
 	    player.setWorth(prize.getWorth());
 	} else
 	{
-	    Prize prize = systemPrizeList.get(userGuess-1);
+	    Prize prize = systemPrizeList.get(userGuess - 1);
 	    System.out.println("Damn! You've just waste $" + prize.getCost() + " here!");
 	    player.setWaste(prize.getCost());
 	}
-	player.setCost(prize.getCost());// player.setSpent();
+	player.setCost(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
 	// (spent++)
 	Tools.hold();
     }
@@ -150,7 +150,7 @@ public class Game
 	    if (!flag)
 		System.out.println(playerList.getOrderedList().get(i).toString());
 	    else
-		System.out.println(playerList.getpList().get(i).toString());
+		System.out.println(playerList.getPlayerList().get(i).toString());
 	}
 	Tools.hold();
     }
@@ -165,6 +165,7 @@ public class Game
      */
     private void inputGuess(int systemGuess) throws IllegalInputException
     {
+	showPrizes();
 	System.out.println("Now Guess it! Input an integer from 1 - " + range + ".");
 	System.out.println("The lucky number is:" + systemGuess); // test
 	int userGuess = Tools.inputInteger();
@@ -200,8 +201,6 @@ public class Game
 	    System.exit(0);
 	} catch (IOException e)
 	{
-	    // IO exception
-	    // to be improved
 	    e.printStackTrace();
 	} finally
 	{
@@ -216,7 +215,6 @@ public class Game
 	if (sb.length() == 0)
 	    System.exit(0);
 	String[] prize = sb.toString().split(Tools.SEPARATOR);
-	System.out.println(sb.toString());
 	for (String attribute : prize)
 	{
 	    String[] temp = attribute.split(",");
@@ -305,7 +303,7 @@ public class Game
 	    case 26298090:
 		System.out.print('\u000C');
 		adminControl.runAdmin();
-		loadFile();
+//		loadFile();
 		break;
 	    default:
 		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
@@ -350,16 +348,17 @@ public class Game
     /**
      * The setter of field player.
      * 
-     * @param player
-     *            the player should be set.
-     * @throws IllegalInputException
+     * @param x
+     *            he loop limit.
+     * @param flag
+     *            Whether to give player infinity chance to input name, being
+     *            true for infinite loop
+     * 
      */
     private void setPlayer(int x, boolean flag)
     {
-	for (int i = 0; true; i++)
+	for (int i = 0; flag || i < x; i++)
 	{
-	    if (!flag && i >= x)
-		break;
 	    System.out.println("Enter your name plz. Enter\"exit\" to quit:");
 	    String temp = Tools.console.nextLine();
 	    if (temp.equalsIgnoreCase("exit"))
@@ -369,8 +368,8 @@ public class Game
 	    {
 		try
 		{
-		    Player newPlayer = new Player(temp);
-		    newPlayer.validation();
+		    player = new Player(temp);
+		    player.validation();
 		    playerList.addPlayer(player);
 		    System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
 		    System.out.println("Loading...");

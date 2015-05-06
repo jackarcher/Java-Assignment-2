@@ -42,7 +42,8 @@ public class Player
 
     /**
      * Default constructor. May seldom be called.
-     * @throws ValidationException 
+     * 
+     * @throws ValidationException
      */
     public Player() throws ValidationException
     {
@@ -60,15 +61,17 @@ public class Player
      * 
      * @param name
      *            The name of the player defined by the player.
+     * @throws ValidationException
      */
-    public Player(String name)
+    public Player(String name) throws ValidationException
     {
-	this.name = name;
+	this.name = name.trim();
 	this.prizes = "";
 	this.prizeList = new ArrayList<Prize>();
 	this.worth = 0;
 	this.cost = 0;
 	this.waste = 0;
+	validation();
 
     }
 

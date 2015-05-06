@@ -41,7 +41,7 @@ public class Prize
     public Prize(String name, int worth, int cost) throws ValidationException
     {
 	super();
-	this.name = name;
+	this.name = name.trim();
 	this.worth = worth;
 	this.cost = cost;
 	validation();
