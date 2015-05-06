@@ -2,13 +2,15 @@ package domain;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.ValidationException;
+
 import systemTools.Tools;
 
 /**
  * Class player, contains all the information of a player.
  * 
  * @author archer
- *
+ * 
  */
 public class Player
 {
@@ -40,8 +42,9 @@ public class Player
 
     /**
      * Default constructor. May seldom be called.
+     * @throws ValidationException 
      */
-    public Player()
+    public Player() throws ValidationException
     {
 	this.name = "";
 	this.prizes = "";
@@ -49,6 +52,7 @@ public class Player
 	this.worth = 0;
 	this.cost = 0;
 	this.waste = 0;
+	validation();
     }
 
     /**
@@ -69,6 +73,16 @@ public class Player
     }
 
     /**
+     * The getter of the field spent.
+     * 
+     * @return The money the player has spent.
+     */
+    public int getCost()
+    {
+	return cost;
+    }
+
+    /**
      * The getter of field name .
      * 
      * @return The name of the player.
@@ -79,14 +93,13 @@ public class Player
     }
 
     /**
-     * The setter of the field name.
+     * The getter of the field PrizeList.
      * 
-     * @param name
-     *            The name that u wanna set.
+     * @return the prize list that the player has already won.
      */
-    public void setName(String name)
+    public ArrayList<Prize> getPrizeList()
     {
-	this.name = name;
+	return prizeList;
     }
 
     /**
@@ -100,14 +113,13 @@ public class Player
     }
 
     /**
-     * The setter of field prizes. Only ADD the new prize.
+     * The getter of the field waste.
      * 
-     * @param prizes
-     *            The new prizes that should be ADDED to the prizes.
+     * @return The money the player has waste.
      */
-    public void setPrizes(String prizes)
+    public int getWaste()
     {
-	this.prizes = this.prizes + prizes + " ";
+	return waste;
     }
 
     /**
@@ -118,27 +130,6 @@ public class Player
     public int getWorth()
     {
 	return worth;
-    }
-
-    /**
-     * The setter of the field worth. Only ADD the worth of the new prizes.
-     * 
-     * @param worth
-     *            The worth of the prize that the player has just won.
-     */
-    public void setWorth(int worth)
-    {
-	this.worth = this.worth + worth;
-    }
-
-    /**
-     * The getter of the field spent.
-     * 
-     * @return The money the player has spent.
-     */
-    public int getCost()
-    {
-	return cost;
     }
 
     /**
@@ -154,23 +145,25 @@ public class Player
     }
 
     /**
-     * The getter of the field PrizeList.
+     * The setter of the field name.
      * 
-     * @return the prize list that the player has already won.
+     * @param name
+     *            The name that u wanna set.
      */
-    public ArrayList<Prize> getPrizeList()
+    public void setName(String name)
     {
-	return prizeList;
+	this.name = name;
     }
 
     /**
-     * The getter of the field waste.
+     * The setter of field prizes. Only ADD the new prize.
      * 
-     * @return The money the player has waste.
+     * @param prizes
+     *            The new prizes that should be ADDED to the prizes.
      */
-    public int getWaste()
+    public void setPrizes(String prizes)
     {
-	return waste;
+	this.prizes = this.prizes + prizes + " ";
     }
 
     /**
@@ -183,6 +176,23 @@ public class Player
     public void setWaste(int waste)
     {
 	this.waste += waste;
+    }
+
+    /**
+     * The setter of the field worth. Only ADD the worth of the new prizes.
+     * 
+     * @param worth
+     *            The worth of the prize that the player has just won.
+     */
+    public void setWorth(int worth)
+    {
+	this.worth = this.worth + worth;
+    }
+
+    public void validation() throws ValidationException
+    {
+	if (name.isEmpty())
+	    throw new ValidationException("Empty Name is not permitted");
     }
 
     @Override

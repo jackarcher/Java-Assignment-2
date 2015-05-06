@@ -11,7 +11,7 @@ import comparator.ComparatorForPlayer;
  * sort).
  * 
  * @author archer
- *
+ * 
  */
 public class PlayerList
 {
@@ -43,6 +43,11 @@ public class PlayerList
      */
     public boolean addPlayer(Player player)
     {
+	for (Player eachPlayer : pList)
+	{
+	    if(player.getName().equalsIgnoreCase(eachPlayer.getName()))
+		return false;
+	}
 	return pList.add(player) && OrderedList.add(player);
     }
 
@@ -93,4 +98,6 @@ public class PlayerList
     {
 	Collections.sort(OrderedList, new ComparatorForPlayer());
     }
+
+
 }

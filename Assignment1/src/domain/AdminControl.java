@@ -1,20 +1,19 @@
 package domain;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import exceptions.IllegalInputException;
 import systemTools.Tools;
+import exceptions.IllegalInputException;
 
 public class AdminControl
 {
     private ArrayList<Prize> systemPrizeList;
 
-    public AdminControl(ArrayList<Prize> p)
+    public AdminControl(ArrayList<Prize> prizeList)
     {
-	systemPrizeList = p;
+	systemPrizeList = prizeList;
     }
 
     private void displayMenu()
@@ -31,13 +30,65 @@ public class AdminControl
 	System.out.println("	Make your choice:");
     }
 
+    private Prize inputPrize()
+    {
+	String name;
+	int worth;
+	int cost;
+	while (true)
+	{
+	    try
+	    {
+		System.out.println("Please input the name of prize, input \"exit\" to quit");
+		name = Tools.console.nextLine();
+		if (name.equalsIgnoreCase("exit"))
+		    return null;
+		System.out.println("Please input the worth of prize");
+		worth = Tools.inputInteger();
+		System.out.println("Please input the cost of prize");
+		cost = Tools.inputInteger();
+		Prize newPrize = new Prize(name, worth, cost);
+		return newPrize;
+	    } catch (Exception e)
+	    {
+		System.out.println("Validation fail." + Tools.SEPARATOR);
+		System.out.println("Detail:");
+		System.out.println(e.getMessage() + Tools.SEPARATOR);
+		System.out.println("Please do it again" + Tools.SEPARATOR);
+		continue;
+	    }
+	}
+    }
+
+    private int inputRemove()
+    {
+	System.out.println("This is the Prize List");
+	for (int i = 0; i < systemPrizeList.size(); i++)
+	{
+	    System.out.println("No." + i + ". " + systemPrizeList.get(i).toString());
+	}
+	System.out.println(Tools.SEPARATOR + "Please input the one you wanna remove");
+	int result = 0;
+	while (true)
+	{
+	    try
+	    {
+		result = Tools.inputInteger();
+		return result;
+	    } catch (IllegalInputException e)
+	    {
+		System.out.println(e.getMessage());
+	    }
+	}
+    }
+
     public void runAdmin()
     {
 
 	while (true)
 	{
 	    displayMenu();
-	    int choice = Tools.input();
+	    int choice = Tools.inputInteger();
 	    switch (choice)
 	    {
 		case 1:
@@ -66,71 +117,35 @@ public class AdminControl
 		case 6:
 		    System.exit(0);
 		default:
-		    System.out
-			    .println("Please make choice using integer range 1 - 6.");
-		    choice = Tools.input();
+		    System.out.println("Please make choice using integer range 1 - 6.");
+		    choice = Tools.inputInteger();
 		    break;
 	    }
 	}
     }
 
-    private int inputRemove()
+    /**
+     * Show a "table" in which contains all the information about the prize that
+     * the machine can give out.
+     */
+    private void showPrizes()
     {
-	System.out.println("This is the Prize List");
-	for (int i = 0; i < systemPrizeList.size(); i++)
+	int longest = 0;
+	for (Prize prize : systemPrizeList)
 	{
-	    System.out.println("No." + i + ". "
-		    + systemPrizeList.get(i).toString());
+	    if (longest < prize.getName().length())
+		longest = prize.getName().length();
 	}
-	System.out.println(Tools.SEPARATOR
-		+ "Please input the one you wanna remove");
-	int result = 0;
-	while (true)
+	longest += 3;
+	String format = "|%17s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
+	/*
+	 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
+	 * format-example/
+	 */
+	System.out.printf(format, "Number Generated", "Prize is", "Prize Worth", "Cost to player");
+	for (Prize prize : systemPrizeList)
 	{
-	    try
-	    {
-		result = Tools.input();
-		return result;
-	    } catch (IllegalInputException e)
-	    {
-		System.out.println(e.getMessage());
-	    }
-	}
-    }
-
-    private Prize inputPrize()
-    {
-	String name;
-	int worth;
-	int cost;
-	while (true)
-	{
-	    try
-	    {
-		System.out
-			.println("Please input the name of prize, input \"exit\" to quit");
-		name = Tools.console.nextLine();
-		if (name.isEmpty())
-		    throw new IllegalInputException("No prize is null");
-		if (name.compareTo("exit") == 0)
-		    return null;
-		System.out.println("Please input the worth of prize");
-		worth = Tools.input();
-		System.out.println("Please input the cost of prize");
-		cost = Tools.input();
-		if (validateCost(cost))
-		    return new Prize(name, worth, cost);
-		else
-		    throw new RuntimeException(
-			    "The cost U input has already exist.");
-	    } catch (Exception e)
-	    {
-		System.out.println("Validation fail." + Tools.SEPARATOR);
-		System.out.println("Detail:");
-		System.out.println(e.getMessage() + Tools.SEPARATOR);
-		System.out.println("Please do it again" + Tools.SEPARATOR);
-		continue;
-	    }
+	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1, prize.getName(), prize.getWorth(), prize.getCost());
 	}
     }
 
@@ -162,47 +177,6 @@ public class AdminControl
 	    {
 		e.printStackTrace();
 	    }
-	}
-    }
-
-    private boolean validateCost(int cost)
-    {
-	boolean flag = true;
-	for (Prize prize : systemPrizeList)
-	{
-	    if (cost == prize.getCost())
-	    {
-		flag = false;
-		break;
-	    }
-	}
-	return flag;
-    }
-
-    /**
-     * Show a "table" in which contains all the information about the prize that
-     * the machine can give out.
-     */
-    private void showPrizes()
-    {
-	int longest = 0;
-	for (Prize prize : systemPrizeList)
-	{
-	    if (longest < prize.getName().length())
-		longest = prize.getName().length();
-	}
-	longest += 3;
-	String format = "|%17s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
-	/*
-	 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
-	 * format-example/
-	 */
-	System.out.printf(format, "Number Generated", "Prize is",
-		"Prize Worth", "Cost to player");
-	for (Prize prize : systemPrizeList)
-	{
-	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1,
-		    prize.getName(), prize.getWorth(), prize.getCost());
 	}
     }
 

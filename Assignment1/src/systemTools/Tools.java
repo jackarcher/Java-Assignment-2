@@ -12,44 +12,9 @@ public class Tools
      */
     public final static Scanner console = new Scanner(System.in);
     
-    public final static File prizeFile = new File("src"+File.separator+"prize.txt");
+    public final static File prizeFile = new File("Assignment1"+File.separator+"src"+File.separator+"prize.txt");
 
     public final static String SEPARATOR = System.getProperty("line.separator");
-
-    public static int input() throws IllegalInputException
-    {
-	int choice;
-	try
-	{
-	    choice = console.nextInt();
-	    return choice;
-	} catch (Exception e)
-	{
-	    throw new IllegalInputException("Please using integer.");
-	}
-	/*
-	 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
-	 * skipped. This line below is added for the reason mentioned by this
-	 * page.
-	 */
-	finally
-	{
-	    console.nextLine();
-	}
-    }
-
-    /**
-     * Hold the program until the user type any key. Basically used for player
-     * to read some long instruction or other system output(such as game help in
-     * this program).
-     */
-    public static void hold()
-    {
-	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
-		+ Tools.SEPARATOR);
-	Tools.console.nextLine();
-	System.out.print('\u000C');
-    }
 
     /**
      * Hold the program for some seconds. Basically used for player to read some
@@ -88,4 +53,42 @@ public class Tools
 	    Thread.currentThread().interrupt();
 	}
     }
+
+    /**
+     * Hold the program until the user type any key. Basically used for player
+     * to read some long instruction or other system output(such as game help in
+     * this program).
+     */
+    public static void hold()
+    {
+	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
+		+ Tools.SEPARATOR);
+	Tools.console.nextLine();
+	System.out.print('\u000C');
+    }
+
+    public static int inputInteger() throws IllegalInputException
+    {
+	int choice;
+	try
+	{
+	    choice = console.nextInt();
+	    return choice;
+	} catch (Exception e)
+	{
+	    throw new IllegalInputException("Please using integer.");
+	}
+	/*
+	 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
+	 * skipped. This line below is added for the reason mentioned by this
+	 * page.
+	 */
+	finally
+	{
+	    console.nextLine();
+	}
+    }
+
+    
+
 }
