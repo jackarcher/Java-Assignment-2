@@ -9,7 +9,9 @@ import java.util.Collections;
 import javax.xml.bind.ValidationException;
 
 import systemTools.Tools;
+
 import comparator.SortForPrizeList;
+
 import exceptions.IllegalInputException;
 
 /**
@@ -46,6 +48,7 @@ public class Game
      */
     private int range;
 
+    private boolean adminFlag;
     /**
      * 
      */
@@ -66,6 +69,7 @@ public class Game
 	adminControl = new AdminControl(systemPrizeList);
 	loadFile();
 	this.range = systemPrizeList.size();
+	adminFlag = true;
     }
 
     /**
@@ -193,6 +197,7 @@ public class Game
 		sb.append((char) b[i]);
 	    }
 	    System.out.println("Read from file successfully");
+//	    Tools.delay(1);
 	    Tools.hold();
 	} catch (FileNotFoundException e)
 	{
@@ -215,10 +220,10 @@ public class Game
 	if (sb.length() == 0)
 	    System.exit(0);
 	String[] prize = sb.toString().split(Tools.SEPARATOR);
+	Prize newPrize = null;
 	for (String attribute : prize)
 	{
 	    String[] temp = attribute.split(",");
-	    Prize newPrize = null;
 	    if (temp.length == 3)
 	    {
 		try
@@ -256,11 +261,12 @@ public class Game
     private boolean makeChoice() throws IllegalInputException
     {
 	boolean displayWelcome = false;
-	int choice = Tools.inputInteger();
+	int choice = Tools.inputInteger("Integer accept only.");
 	if ((choice == 2 || choice == 3) && player == null)
 	{
 	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
-	    setPlayer(3);
+	    if(!setPlayer(3))
+		return true;
 	}
 	switch (choice)
 	{
@@ -301,9 +307,18 @@ public class Game
 		player = null;
 		break;
 	    case 26298090:
-		System.out.print('\u000C');
-		adminControl.runAdmin();
-//		loadFile();
+		if (adminFlag)
+		    adminFlag = adminControl.adminValidation();
+		else
+		{
+		    System.out.println("You have try 3 times");
+		    Tools.hold();
+		}
+		if (adminFlag)
+		{
+		    System.out.print('\u000C');
+		    adminControl.runAdmin();
+		}
 		break;
 	    default:
 		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
@@ -317,7 +332,7 @@ public class Game
      */
     public void play()
     {
-	System.out.println("Welcome to the Lucky Vending Machine");
+	System.out.println("	Welcome to the Lucky Vending Machine");
 	while (true)
 	{
 	    showMenu();
@@ -325,7 +340,7 @@ public class Game
 	    {
 		if (makeChoice())
 		{
-		    System.out.println("Welcome to the Lucky Vending Machine");
+		    System.out.println("	Welcome to the Lucky Vending Machine");
 		}
 	    } catch (IllegalInputException e)
 	    {
@@ -335,14 +350,14 @@ public class Game
 	}
     }
 
-    private void setPlayer()
+    private boolean setPlayer()
     {
-	setPlayer(26298090, true);
+	return setPlayer(26298090, true);
     }
 
-    private void setPlayer(int x)
+    private boolean setPlayer(int x)
     {
-	setPlayer(x, false);
+	return setPlayer(x, false);
     }
 
     /**
@@ -355,7 +370,7 @@ public class Game
      *            true for infinite loop
      * 
      */
-    private void setPlayer(int x, boolean flag)
+    private boolean setPlayer(int x, boolean flag)
     {
 	for (int i = 0; flag || i < x; i++)
 	{
@@ -363,7 +378,7 @@ public class Game
 	    String temp = Tools.console.nextLine();
 	    if (temp.equalsIgnoreCase("exit"))
 	    {
-		return;
+		return false;
 	    } else
 	    {
 		try
@@ -374,7 +389,7 @@ public class Game
 		    System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
 		    System.out.println("Loading...");
 		    Tools.delay(1, false);
-		    return;
+		    return true;
 		} catch (ValidationException e)
 		{
 		    System.out.println(" Validation Fail" + Tools.SEPARATOR);
@@ -386,6 +401,7 @@ public class Game
 	}
 	System.out.println("U really just wanna play with me,right?");
 	System.exit(0);
+	return false;
     }
 
     /**

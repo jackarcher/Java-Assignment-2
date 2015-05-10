@@ -1,42 +1,36 @@
 package main;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import systemTools.Tools;
+import javax.xml.bind.ValidationException;
+
 import domain.Game;
-import domain.Player;
-import domain.PlayerList;
 import domain.Prize;
 
 public class Main
 {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws ValidationException
     {
-//	ArrayList<Prize> p = new ArrayList<Prize>();
-//	int t = 5;
-//	p.add(new Prize("Pen", t * 10, t--));
-//	p.add(new Prize("Book", t * 10, t--));
-//	p.add(new Prize("DVD", t * 10, t--));
-//	p.add(new Prize("Mouse", t * 10, t--));
-//	p.add(new Prize("Keyboard", t * 10, t--));
-//
-//	System.out.println(p.toString());
-//
-//	sort(p);
-//
-//	System.out.println(p.toString());
+	// ArrayList<Prize> p = new ArrayList<Prize>();
+	// int t = 5;
+	// p.add(new Prize("Pen", t * 10, t--));
+	// p.add(new Prize("Book", t * 10, t--));
+	// p.add(new Prize("DVD", t * 10, t--));
+	// p.add(new Prize("Mouse", t * 10, t--));
+	// p.add(new Prize("Keyboard", t * 10, t--));
+	//
+	// System.out.println(p.toString());
+	//
+	// sort(p);
+	//
+	// System.out.println(p.toString());
+	
 
-	 Game game = new Game();
-	 game.play();
+	Game game = new Game();
+	game.play();
+	
 
-	 
-	 
 	// System.out.println(File.separator);
 	//
 	// File f = new File("src" + File.separator + "prize.txt");
@@ -72,7 +66,7 @@ public class Main
 	// }
 	// }
 	// StringBuffer temp = new
-	// StringBuffer(sb.toString().split(T    // test use
+	// StringBuffer(sb.toString().split(T // test use
 	// for (int i = 0; i < sb.length(); i++)
 	// {
 	// temp = new StringBuffer(sb.toString().split(Tools.SEPARATOR)[i]);
@@ -117,6 +111,8 @@ public class Main
 	// System.out.println("################");
 	// System.out.println(player.getName());
 	// }
+
+
     }
 
     public static void exchange(int i, int j, ArrayList<Prize> list)
@@ -133,13 +129,13 @@ public class Main
 	    int min = i;
 	    for (int j = i + 1; j < list.size(); j++)
 	    {
-		if (list.get(j).getCost() - list.get(min).getCost()<0)
+		if (list.get(j).getCost() - list.get(min).getCost() < 0)
 		{
 		    min = j;
-		} 
+		}
 	    }
 	    exchange(i, min, list);
 	}
     }
-    
+
 }

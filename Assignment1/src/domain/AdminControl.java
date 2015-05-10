@@ -16,9 +16,38 @@ public class AdminControl
 	systemPrizeList = prizeList;
     }
 
+    public boolean adminValidation()
+    {
+	/*
+	 * http://stackoverflow.com/questions/8138411/masking-password-input-from
+	 * -the -console-java
+	 * 
+	 * password input reference this page
+	 */
+	/*
+	 * the one above won't work either in BlueJ or eclipse
+	 * 
+	 * long term bug reported:
+	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=122429
+	 * 
+	 */
+	String pwd;
+	for (int i = 3; i > 0; i--)
+	{
+	    System.out.println("You have " + i + " times left");
+	    System.out.print("Password: ");
+	    pwd = Tools.console.nextLine();
+	    if (pwd.equals("12345"))
+		return true;
+	}
+	System.out.println("You are not admin, are you?");
+	System.out.println("You won't got permission until u reboot whole system.");
+	return false;
+    }
+
     private void displayMenu()
     {
-	System.out.println(Tools.SEPARATOR + "		Welcome Admin:");
+	System.out.println(Tools.SEPARATOR + "		Admin Menu");
 	System.out.println("  ---------------------------------------");
 	System.out.println("	1.Add a prize.");
 	System.out.println("	2.Remove a prize.");
@@ -44,9 +73,9 @@ public class AdminControl
 		if (name.equalsIgnoreCase("exit"))
 		    return null;
 		System.out.println("Please input the worth of prize");
-		worth = Tools.inputInteger();
+		worth = Tools.inputInteger("Worth should be integer");
 		System.out.println("Please input the cost of prize");
-		cost = Tools.inputInteger();
+		cost = Tools.inputInteger("Cost should be integer");
 		Prize newPrize = new Prize(name, worth, cost);
 		return newPrize;
 	    } catch (Exception e)
@@ -84,11 +113,18 @@ public class AdminControl
 
     public void runAdmin()
     {
-
+	int choice = 0;
 	while (true)
 	{
 	    displayMenu();
-	    int choice = Tools.inputInteger();
+	    try{
+		choice = Tools.inputInteger("Integer accept only.");
+	    }
+	    catch(IllegalInputException e){
+		System.out.println(e.getMessage());
+		Tools.delay(1);
+		continue;
+	    }
 	    switch (choice)
 	    {
 		case 1:
@@ -118,7 +154,6 @@ public class AdminControl
 		    System.exit(0);
 		default:
 		    System.out.println("Please make choice using integer range 1 - 6.");
-		    choice = Tools.inputInteger();
 		    break;
 	    }
 	}

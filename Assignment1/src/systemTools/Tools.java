@@ -11,8 +11,8 @@ public class Tools
      * Console is an object used for user input.
      */
     public final static Scanner console = new Scanner(System.in);
-    
-    public final static File prizeFile = new File("Assignment1"+File.separator+"src"+File.separator+"prize.txt");
+
+    public final static File prizeFile = new File("src" + File.separator + "prizeForLinux.txt");
 
     public final static String SEPARATOR = System.getProperty("line.separator");
 
@@ -41,8 +41,7 @@ public class Tools
     {
 	if (flag)
 	{
-	    System.out.println(Tools.SEPARATOR + "Back in " + delaytime
-		    + " seconds." + Tools.SEPARATOR);
+	    System.out.println(Tools.SEPARATOR + "Back in " + delaytime + " seconds." + Tools.SEPARATOR);
 	}
 	try
 	{
@@ -61,13 +60,17 @@ public class Tools
      */
     public static void hold()
     {
-	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...."
-		+ Tools.SEPARATOR);
+	System.out.println(Tools.SEPARATOR + "Press <Enter> to continue...." + Tools.SEPARATOR);
 	Tools.console.nextLine();
 	System.out.print('\u000C');
     }
 
-    public static int inputInteger() throws IllegalInputException
+    public static int inputInteger()
+    {
+	return inputInteger("Please using integer..");
+    }
+
+    public static int inputInteger(String info) throws IllegalInputException
     {
 	int choice;
 	try
@@ -76,7 +79,7 @@ public class Tools
 	    return choice;
 	} catch (Exception e)
 	{
-	    throw new IllegalInputException("Please using integer.");
+	    throw new IllegalInputException(info);
 	}
 	/*
 	 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
@@ -88,7 +91,4 @@ public class Tools
 	    console.nextLine();
 	}
     }
-
-    
-
 }

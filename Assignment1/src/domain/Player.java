@@ -192,16 +192,16 @@ public class Player
 	this.worth = this.worth + worth;
     }
 
-    public void validation() throws ValidationException
-    {
-	if (name.isEmpty())
-	    throw new ValidationException("Empty Name is not permitted");
-    }
-
     @Override
     public String toString()
     {
 	// TODO Auto-generated method stub
 	return "Player Name:" + name + Tools.SEPARATOR + "	total prize:" + worth;
+    }
+
+    public void validation() throws ValidationException
+    {
+	if (name.isEmpty())
+	    throw new ValidationException("Empty Name is not permitted");
     }
 }
