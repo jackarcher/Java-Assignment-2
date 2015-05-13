@@ -197,7 +197,7 @@ public class Game
 		sb.append((char) b[i]);
 	    }
 	    System.out.println("Read from file successfully");
-//	    Tools.delay(1);
+	    // Tools.delay(1);
 	    Tools.hold();
 	} catch (FileNotFoundException e)
 	{
@@ -265,7 +265,7 @@ public class Game
 	if ((choice == 2 || choice == 3) && player == null)
 	{
 	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
-	    if(!setPlayer(3))
+	    if (!setPlayer(3))
 		return true;
 	}
 	switch (choice)
@@ -321,7 +321,7 @@ public class Game
 		}
 		break;
 	    default:
-		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
+		throw new IllegalInputException("Please make chnewPlayeroice using integer range 1 - 7.");
 	}
 	return displayWelcome;
     }
@@ -374,6 +374,7 @@ public class Game
     {
 	for (int i = 0; flag || i < x; i++)
 	{
+	    Player newPlayer;
 	    System.out.println("Enter your name plz. Enter\"exit\" to quit:");
 	    String temp = Tools.console.nextLine();
 	    if (temp.equalsIgnoreCase("exit"))
@@ -383,13 +384,19 @@ public class Game
 	    {
 		try
 		{
-		    player = new Player(temp);
-		    player.validation();
-		    playerList.addPlayer(player);
-		    System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
-		    System.out.println("Loading...");
-		    Tools.delay(1, false);
-		    return true;
+		    newPlayer = new Player(temp);
+		    newPlayer.validation();
+		    if (playerList.validation(newPlayer))
+			playerList.addPlayer(newPlayer);
+		    else if (resumeGame(newPlayer))
+		    {
+			System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
+			System.out.println("Loading...");
+			Tools.delay(1, false);
+			return true;
+		    }
+		    else
+			return false;
 		} catch (ValidationException e)
 		{
 		    System.out.println(" Validation Fail" + Tools.SEPARATOR);
@@ -402,6 +409,24 @@ public class Game
 	System.out.println("U really just wanna play with me,right?");
 	System.exit(0);
 	return false;
+    }
+
+    private boolean resumeGame(Player newPlayer)
+    {
+	System.out.println("Player already exist");
+	System.out.println("Would you like to resume your ganme:y/n?");
+	String answer = Tools.console.nextLine();
+	if (answer.equalsIgnoreCase("y"))
+	{
+	    player = playerList.sameNamePlayer(newPlayer);
+	    return true;
+	} else if (answer.equalsIgnoreCase("n"))
+	    return false;
+	else
+	{
+	    System.out.println("only y or n is accept");
+	    return resumeGame(newPlayer);
+	}
     }
 
     /**

@@ -29,7 +29,6 @@ public class AdminControl
 	 * 
 	 * long term bug reported:
 	 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=122429
-	 * 
 	 */
 	String pwd;
 	for (int i = 3; i > 0; i--)
@@ -43,6 +42,20 @@ public class AdminControl
 	System.out.println("You are not admin, are you?");
 	System.out.println("You won't got permission until u reboot whole system.");
 	return false;
+    }
+
+    private boolean prizeListValidation(Prize newPrize)
+    {
+	boolean flag = true;
+	if (newPrize == null)
+	    flag = false;
+	for (Prize prize : systemPrizeList)
+	{
+	    if (prize.equals(newPrize))
+		flag = false;
+	    break;
+	}
+	return flag;
     }
 
     private void displayMenu()
@@ -117,10 +130,11 @@ public class AdminControl
 	while (true)
 	{
 	    displayMenu();
-	    try{
+	    try
+	    {
 		choice = Tools.inputInteger("Integer accept only.");
-	    }
-	    catch(IllegalInputException e){
+	    } catch (IllegalInputException e)
+	    {
 		System.out.println(e.getMessage());
 		Tools.delay(1);
 		continue;
@@ -129,12 +143,12 @@ public class AdminControl
 	    {
 		case 1:
 		    Prize input = inputPrize();
-		    if (input == null)
+		    // validation
+		    if (prizeListValidation(input))
 		    {
-			break;
+			systemPrizeList.add(input);
+			Tools.hold();
 		    }
-		    systemPrizeList.add(input);
-		    Tools.hold();
 		    break;
 		case 2:
 		    systemPrizeList.remove(inputRemove());

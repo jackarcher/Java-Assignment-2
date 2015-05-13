@@ -42,13 +42,13 @@ public class PlayerList
      *            The player should be added to the array.
      * @return Whether the player added successfully, being true refers to
      *         successful.
-     * @throws ValidationException 
+     * @throws ValidationException
      */
     public boolean addPlayer(Player player) throws ValidationException
     {
 	for (Player eachPlayer : playerList)
 	{
-	    if(player.getName().equalsIgnoreCase(eachPlayer.getName()))
+	    if (player.getName().equalsIgnoreCase(eachPlayer.getName()))
 		throw new ValidationException("Player already exist!");
 	}
 	return playerList.add(player) && OrderedList.add(player);
@@ -102,5 +102,24 @@ public class PlayerList
 	Collections.sort(OrderedList, new ComparatorForPlayer());
     }
 
+    public boolean validation(Player newPlayer)
+    {
+	boolean flag = true;
+	if (sameNamePlayer(newPlayer) != null)
+	    flag = false;
+	return flag;
+    }
+
+    public Player sameNamePlayer(Player newPlayer)
+    {
+	for (Player player : playerList)
+	{
+	    if (player.equals(newPlayer))
+	    {
+		return player;
+	    }
+	}
+	return null;
+    }
 
 }

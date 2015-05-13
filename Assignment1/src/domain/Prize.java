@@ -132,4 +132,25 @@ public class Prize
 	// return "Prize [name = " + name + ", worth = " + worth + ", cost = " +
 	// cost + "]";
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+	if (this == obj)
+	    return true;
+	if (getClass() != obj.getClass())
+	    return false;
+	Prize prize = (Prize) obj;
+	// if (name == null)
+	// {
+	// if (prize.name != null)
+	// return false;
+	// } else if (!name.equals(prize.name))
+	// return false;
+	// return true;
+	if (this.name != prize.name)
+	    return false;
+	else
+	    return true;
+    }
 }
