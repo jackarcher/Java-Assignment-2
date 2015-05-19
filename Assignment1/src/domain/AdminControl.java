@@ -86,9 +86,9 @@ public class AdminControl
 		if (name.equalsIgnoreCase("exit"))
 		    return null;
 		System.out.println("Please input the worth of prize");
-		worth = Tools.inputInteger("Worth should be integer");
+		worth = Tools.inputInteger();
 		System.out.println("Please input the cost of prize");
-		cost = Tools.inputInteger("Cost should be integer");
+		cost = Tools.inputInteger();
 		Prize newPrize = new Prize(name, worth, cost);
 		return newPrize;
 	    } catch (Exception e)
@@ -130,15 +130,7 @@ public class AdminControl
 	while (true)
 	{
 	    displayMenu();
-	    try
-	    {
-		choice = Tools.inputInteger("Integer accept only.");
-	    } catch (IllegalInputException e)
-	    {
-		System.out.println(e.getMessage());
-		Tools.delay(1);
-		continue;
-	    }
+	    choice = Tools.inputInteger();
 	    switch (choice)
 	    {
 		case 1:

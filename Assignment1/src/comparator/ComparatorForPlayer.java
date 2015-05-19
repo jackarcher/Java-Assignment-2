@@ -35,8 +35,6 @@ public class ComparatorForPlayer implements Comparator<Player>
 	    result = o2.getCost() - o1.getCost();
 	if (result == 0)
 	    result = o2.getWaste() - o1.getWaste();
-	if (result == 0)
-	    result = 0;
 	return result;
 
     }

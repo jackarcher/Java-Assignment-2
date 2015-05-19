@@ -196,7 +196,7 @@ public class Player
     public String toString()
     {
 	// TODO Auto-generated method stub
-	return "Player Name:" + name + Tools.SEPARATOR + "	total prize:" + worth;
+	return "Player Name: " + name + Tools.SEPARATOR + "	total prize:" + worth;
     }
 
     public void validation() throws ValidationException

@@ -129,7 +129,7 @@ public class Main
 	    int min = i;
 	    for (int j = i + 1; j < list.size(); j++)
 	    {
-		if (list.get(j).getCost() - list.get(min).getCost() < 0)
+		if (list.get(j).getCost() < list.get(min).getCost())
 		{
 		    min = j;
 		}

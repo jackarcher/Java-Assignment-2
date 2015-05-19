@@ -261,7 +261,7 @@ public class Game
     private boolean makeChoice() throws IllegalInputException
     {
 	boolean displayWelcome = false;
-	int choice = Tools.inputInteger("Integer accept only.");
+	int choice = Tools.inputInteger();
 	if ((choice == 2 || choice == 3) && player == null)
 	{
 	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
@@ -321,7 +321,7 @@ public class Game
 		}
 		break;
 	    default:
-		throw new IllegalInputException("Please make chnewPlayeroice using integer range 1 - 7.");
+		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
 	}
 	return displayWelcome;
     }
@@ -387,15 +387,16 @@ public class Game
 		    newPlayer = new Player(temp);
 		    newPlayer.validation();
 		    if (playerList.validation(newPlayer))
+		    {
 			playerList.addPlayer(newPlayer);
-		    else if (resumeGame(newPlayer))
+			return true;
+		    } else if (resumeGame(newPlayer))
 		    {
 			System.out.println("Hi," + this.player.getName() + ". Welcome to the LUCKY VENDING MACHINE!!");
 			System.out.println("Loading...");
 			Tools.delay(1, false);
 			return true;
-		    }
-		    else
+		    } else
 			return false;
 		} catch (ValidationException e)
 		{

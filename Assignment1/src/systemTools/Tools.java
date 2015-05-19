@@ -1,9 +1,8 @@
 package systemTools;
 
 import java.io.File;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-
-import exceptions.IllegalInputException;
 
 public class Tools
 {
@@ -67,28 +66,21 @@ public class Tools
 
     public static int inputInteger()
     {
-	return inputInteger("Please using integer..");
-    }
-
-    public static int inputInteger(String info) throws IllegalInputException
-    {
-	int choice;
 	try
 	{
-	    choice = console.nextInt();
-	    return choice;
+	    int i = console.nextInt();
+	    console.nextLine();
+	    return i;
+	} catch (InputMismatchException e)
+	{
+	    System.out.println("Please use integer ONLY.");
+	    console.nextLine();
+	    return inputInteger();
 	} catch (Exception e)
 	{
-	    throw new IllegalInputException(info);
-	}
-	/*
-	 * http://stackoverflow.com/questions/14898617/scanner-nextline-is-being-
-	 * skipped. This line below is added for the reason mentioned by this
-	 * page.
-	 */
-	finally
-	{
+	    System.out.println("Unknow error, please do it again.");
 	    console.nextLine();
+	    return inputInteger();
 	}
     }
 }
