@@ -137,6 +137,24 @@ public class Game
     }
 
     /**
+     * Simply printout the Menu.
+     */
+    private void displayMenu()
+    {
+	System.out.printf("  %24s" + Tools.SEPARATOR, "Menu");
+	System.out.println("  ============================================");
+	System.out.println("    (1) Set Up New Player");
+	System.out.println("    (2) Guess A Prize");
+	System.out.println("    (3) What Have I Won So Far?");
+	System.out.println("    (4) Who are the top 3 luckiest players?");
+	System.out.println("    (5) Display all players's statistics");
+	System.out.println("    (6) Display Game Help");
+	System.out.println("    (7) Exit Game");
+	System.out.println("  ============================================");
+	System.out.println("  Choose an option :");
+    }
+
+    /**
      * Displayer all users information.
      */
     private void displayPlayersInformation()
@@ -201,6 +219,42 @@ public class Game
     }
 
     /**
+     * This method is used for show all the information about the player. Such
+     * as his or her name, and the game status so far.
+     */
+    private void displayUsersInformation()
+    {
+	System.out.println("Dear" + this.player.getName() + "," + Tools.SEPARATOR);
+	if (!player.getPrizeList().isEmpty())
+	{
+	    System.out.println("So far, U have won: " + Tools.SEPARATOR);
+	    int longest = 0;
+	    for (Prize prize : player.getPrizeList())
+	    {
+		if (longest < prize.getName().length())
+		    longest = prize.getName().length();
+	    }
+	    longest += 3;
+	    String format = "|%5s|%" + longest + "s|%7s|%7s|" + Tools.SEPARATOR;
+	    System.out.printf(format, "No", "Prize", " Worth", "Cost");
+	    int i = 1;
+	    for (Prize prize : player.getPrizeList())
+	    {
+		System.out.printf(format, i++, prize.getName(), prize.getWorth(), prize.getCost());
+	    }
+	    System.out.printf(format, "", "", "", "");
+	    System.out.printf(format, "", "Waste", "", player.getWaste());
+	    System.out.printf(format, "", "", "", "");
+	    System.out.printf(format, "Total", "", player.getWorth(), player.getCost());
+	} else if (player.getCost() != 0)
+	    System.out.println("Em...I know U have spent $" + player.getCost() + " on me, but sometime it is your luck to blame, right?");
+	else
+	    System.out.println("U must be kidding me, u haven't spent even 1 cent on me!");
+	Tools.hold();
+
+    }
+
+    /**
      * This method is used for actually "play" the guess game.
      * 
      * @throws IllegalInputException
@@ -232,6 +286,7 @@ public class Game
 	    System.exit(0);
 	String[] prize = sb.toString().split(Tools.SEPARATOR);
 	Prize newPrize = null;
+	System.out.println("Load report:");
 	for (String attribute : prize)
 	{
 	    String[] temp = attribute.split(",");
@@ -243,29 +298,28 @@ public class Game
 		    if (adminControl.prizeListValidation(newPrize))
 			systemPrizeList.add(newPrize);
 		    else
-			System.out.println(temp[0]+" has already exist. This line will be ignored");
+			System.out.println("line: \"" + attribute + "\" has already exist. This line will be ignored");
 		} catch (NumberFormatException e)
 		{
-		    System.out.println(temp[0]+" Worth or Cost onvert to integer fail, this line will be ignored");
+		    System.out.println("line: \"" + attribute + "\" Worth or Cost onvert to integer fail, this line will be ignored");
 		} catch (ValidationException e)
 		{
 		    System.out.println(e.getMessage());
 		}
 	    } else
 	    {
-		System.out.println("\"" + attribute + "\" is a illegal line");
+		System.out.println("line: \"" +  attribute + "\" is a illegal line");
 	    }
 	}
 	Collections.sort(systemPrizeList, new SortForPrizeList());
-	/*for (int i = 1; i < systemPrizeList.size(); i++)
-	{
-	    if (systemPrizeList.get(i).getCost() == systemPrizeList.get(i - 1).getCost())
-	    {
-		System.out.println("Remove the same cost prize!" + Tools.SEPARATOR + "Detail:");
-		System.out.println(systemPrizeList.get(i).toString());
-		systemPrizeList.remove(i);
-	    }
-	}*/
+	/*
+	 * for (int i = 1; i < systemPrizeList.size(); i++) { if
+	 * (systemPrizeList.get(i).getCost() == systemPrizeList.get(i -
+	 * 1).getCost()) { System.out.println("Remove the same cost prize!" +
+	 * Tools.SEPARATOR + "Detail:");
+	 * System.out.println(systemPrizeList.get(i).toString());
+	 * systemPrizeList.remove(i); } }
+	 */
 	this.range = systemPrizeList.size();
 	System.out.println("Load done!");
 	Tools.hold();
@@ -312,7 +366,7 @@ public class Game
 		}
 		break;
 	    case 3:
-		showUsersInformation();
+		displayUsersInformation();
 		break;
 	    case 4:
 		displayLuckiest(3);
@@ -327,6 +381,7 @@ public class Game
 		System.out.println("Hope U have enjoyed the game!");
 		// System.exit(0);
 		player = null;
+		System.out.print("\u000c");
 		break;
 	    case 26298090:
 		if (adminFlag)
@@ -340,7 +395,7 @@ public class Game
 		{
 		    System.out.print('\u000C');
 		    adminControl.runAdmin();
-		    load(readFromFile());
+		    range = systemPrizeList.size();
 		}
 		break;
 	    default:
@@ -358,7 +413,7 @@ public class Game
 	System.out.println("	Welcome to the Lucky Vending Machine");
 	while (true)
 	{
-	    showMenu();
+	    displayMenu();
 	    try
 	    {
 		if (makeChoice())
@@ -445,7 +500,7 @@ public class Game
      * The setter of field player.
      * 
      * @param x
-     *            he loop limit.
+     *            the loop limit.
      * @param flag
      *            Whether to give player infinity chance to input name, being
      *            true for infinite loop
@@ -469,6 +524,7 @@ public class Game
 		    newPlayer.validation();
 		    if (playerList.validation(newPlayer))
 		    {
+			player = newPlayer;
 			playerList.addPlayer(newPlayer);
 			return true;
 		    } else if (resumeGame(newPlayer))
@@ -491,60 +547,6 @@ public class Game
 	System.out.println("U really just wanna play with me,right?");
 	System.exit(0);
 	return false;
-    }
-
-    /**
-     * Simply printout the Menu.
-     */
-    private void showMenu()
-    {
-	System.out.printf("  %24s" + Tools.SEPARATOR, "Menu");
-	System.out.println("  ============================================");
-	System.out.println("    (1) Set Up New Player");
-	System.out.println("    (2) Guess A Prize");
-	System.out.println("    (3) What Have I Won So Far?");
-	System.out.println("    (4) Who are the top 3 luckiest players?");
-	System.out.println("    (5) Display all players's statistics");
-	System.out.println("    (6) Display Game Help");
-	System.out.println("    (7) Exit Game");
-	System.out.println("  ============================================");
-	System.out.println("  Choose an option :");
-    }
-
-    /**
-     * This method is used for show all the information about the player. Such
-     * as his or her name, and the game status so far.
-     */
-    private void showUsersInformation()
-    {
-	System.out.println("Dear" + this.player.getName() + "," + Tools.SEPARATOR);
-	if (!player.getPrizeList().isEmpty())
-	{
-	    System.out.println("So far, U have won: " + Tools.SEPARATOR);
-	    int longest = 0;
-	    for (Prize prize : player.getPrizeList())
-	    {
-		if (longest < prize.getName().length())
-		    longest = prize.getName().length();
-	    }
-	    longest += 3;
-	    String format = "|%5s|%" + longest + "s|%7s|%7s|" + Tools.SEPARATOR;
-	    System.out.printf(format, "No", "Prize", " Worth", "Cost");
-	    int i = 1;
-	    for (Prize prize : player.getPrizeList())
-	    {
-		System.out.printf(format, i++, prize.getName(), prize.getWorth(), prize.getCost());
-	    }
-	    System.out.printf(format, "", "", "", "");
-	    System.out.printf(format, "", "Waste", "", player.getWaste());
-	    System.out.printf(format, "", "", "", "");
-	    System.out.printf(format, "Total", "", player.getWorth(), player.getCost());
-	} else if (player.getCost() != 0)
-	    System.out.println("Em...I know U have spent $" + player.getCost() + " on me, but sometime it is your luck to blame, right?");
-	else
-	    System.out.println("U must be kidding me, u haven't spent even 1 cent on me!");
-	Tools.hold();
-
     }
 
 }

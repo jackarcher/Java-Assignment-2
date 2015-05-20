@@ -6,6 +6,10 @@ I'm a beginer here, any suggestion is welcomed!
 
 My email : jacknimrodarcher@gmail.com
 
+version
+--------
+ver 2.5
+
 Read me:
 --------
 	This program is for my personal academic use ONLY, no one should use it for his or her assignment.
@@ -26,6 +30,8 @@ To-do list:
 	
 done
 --------
+	validation
+	bugfix
 	ioStream
 	HD option
 	little debug

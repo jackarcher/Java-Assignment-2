@@ -151,16 +151,14 @@ public class AdminControl
      */
     public boolean prizeListValidation(Prize newPrize)
     {
-	boolean flag = true;
 	if (newPrize == null)
-	    flag = false;
+	    return false;
 	for (Prize prize : systemPrizeList)
 	{
 	    if (prize.equals(newPrize))
-		flag = false;
-	    break;
+		return false;
 	}
-	return flag;
+	return true;
     }
 
     /**
