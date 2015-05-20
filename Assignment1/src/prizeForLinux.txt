@@ -6,3 +6,7 @@ Pen,10,1
 HDD,100,7
 Modem,90,8
 Laptop,120,6
+,,
+archer,a,
+Modem,90,8
+archer1,a,5

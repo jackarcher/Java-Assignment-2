@@ -39,21 +39,30 @@ public class Game
      * generator.
      */
     private LuckyGuessGenerator luckyGuessGenerator;
+
     /**
      * systemPrizeList is an ArrayList contains all the prizes in this machine.
      */
     private ArrayList<Prize> systemPrizeList;
+
     /**
      * Range here means how many prizes here in this program.
      */
     private int range;
 
-    private boolean adminFlag;
     /**
-     * 
+     * references whether the user has right to try accessing the admin.
+     */
+    private boolean adminFlag;
+
+    /**
+     * The list contain all players.
      */
     private PlayerList playerList;
 
+    /**
+     * The new "window" for admin to control the whole system.
+     */
     private AdminControl adminControl;
 
     /**
@@ -76,7 +85,9 @@ public class Game
      * Compare the 2 numbers only if the userGuess pass the check!
      * 
      * @param userGuess
+     *            the number user guessed.
      * @param systemGuess
+     *            the random number system generated.
      */
     private void compareGuess(int userGuess, int systemGuess)
     {
@@ -109,13 +120,15 @@ public class Game
 	System.out.println("First, U will have to create a new player before you begin the game." + Tools.SEPARATOR);
 	System.out.println("Second, if U do something wrong, just follow the instruction" + Tools.SEPARATOR);
 	System.out.println("And here is the prize list!" + Tools.SEPARATOR);
-	showPrizes();
+	displayPrizes();
 	Tools.hold();
     }
 
     /**
+     * Display the most luckiest guy in the game.
      * 
      * @param i
+     *            references the number that should be displayed.
      */
     private void displayLuckiest(int i)
     {
@@ -124,7 +137,7 @@ public class Game
     }
 
     /**
-     * 
+     * Displayer all users information.
      */
     private void displayPlayersInformation()
     {
@@ -132,6 +145,9 @@ public class Game
     }
 
     /**
+     * Display some information about the players. user can select display all
+     * or part of all the players. If the given number is greater than the
+     * list's size, it will automatically display all players.
      * 
      * @param number
      *            The max number of players u wanna display
@@ -160,6 +176,31 @@ public class Game
     }
 
     /**
+     * Show a "table" in which contains all the information about the prize that
+     * the machine can give out.
+     */
+    private void displayPrizes()
+    {
+	int longest = 0;
+	for (Prize prize : systemPrizeList)
+	{
+	    if (longest < prize.getName().length())
+		longest = prize.getName().length();
+	}
+	longest += 3;
+	String format = "|%17s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
+	/*
+	 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
+	 * format-example/
+	 */
+	System.out.printf(format, "Number Generated", "Prize is", "Prize Worth", "Cost to player");
+	for (Prize prize : systemPrizeList)
+	{
+	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1, prize.getName(), prize.getWorth(), prize.getCost());
+	}
+    }
+
+    /**
      * This method is used for actually "play" the guess game.
      * 
      * @throws IllegalInputException
@@ -169,7 +210,7 @@ public class Game
      */
     private void inputGuess(int systemGuess) throws IllegalInputException
     {
-	showPrizes();
+	displayPrizes();
 	System.out.println("Now Guess it! Input an integer from 1 - " + range + ".");
 	System.out.println("The lucky number is:" + systemGuess); // test
 	int userGuess = Tools.inputInteger();
@@ -180,47 +221,7 @@ public class Game
 	compareGuess(userGuess, systemGuess);
     }
 
-    /**
-     * Load or reload the prize txt file, convert it to a StringBuffer.
-     */
-    private StringBuffer readFromFile()
-    {
-	FileInputStream fis = null;
-	StringBuffer sb = new StringBuffer();
-	try
-	{
-	    fis = new FileInputStream(Tools.prizeFile);
-	    byte[] b = new byte[fis.available()];
-	    fis.read(b);
-	    for (int i = 0; i < b.length; i++)
-	    {
-		sb.append((char) b[i]);
-	    }
-	    System.out.println("Read from file successfully");
-	    // Tools.delay(1);
-	    Tools.hold();
-	} catch (FileNotFoundException e)
-	{
-	    System.out.println(Tools.prizeFile.getAbsolutePath());
-	    System.out.println("No such file");
-	    System.exit(0);
-	} catch (IOException e)
-	{
-	    e.printStackTrace();
-	} finally
-	{
-	    try
-	    {
-		fis.close();
-	    } catch (IOException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return sb;
-    }
-
-    //need more validation
+    // need more validation?
     /**
      * 
      * @param sb
@@ -239,15 +240,24 @@ public class Game
 		try
 		{
 		    newPrize = new Prize(temp[0], Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
-		    systemPrizeList.add(newPrize);
+		    if (adminControl.prizeListValidation(newPrize))
+			systemPrizeList.add(newPrize);
+		    else
+			System.out.println(temp[0]+" has already exist. This line will be ignored");
+		} catch (NumberFormatException e)
+		{
+		    System.out.println(temp[0]+" Worth or Cost onvert to integer fail, this line will be ignored");
 		} catch (ValidationException e)
 		{
 		    System.out.println(e.getMessage());
 		}
+	    } else
+	    {
+		System.out.println("\"" + attribute + "\" is a illegal line");
 	    }
 	}
 	Collections.sort(systemPrizeList, new SortForPrizeList());
-	for (int i = 1; i < systemPrizeList.size(); i++)
+	/*for (int i = 1; i < systemPrizeList.size(); i++)
 	{
 	    if (systemPrizeList.get(i).getCost() == systemPrizeList.get(i - 1).getCost())
 	    {
@@ -255,8 +265,10 @@ public class Game
 		System.out.println(systemPrizeList.get(i).toString());
 		systemPrizeList.remove(i);
 	    }
-	}
+	}*/
 	this.range = systemPrizeList.size();
+	System.out.println("Load done!");
+	Tools.hold();
     }
 
     /**
@@ -361,6 +373,64 @@ public class Game
 	}
     }
 
+    /**
+     * Load or reload the prize txt file, convert it to a StringBuffer.
+     */
+    private StringBuffer readFromFile()
+    {
+	FileInputStream fis = null;
+	StringBuffer sb = new StringBuffer();
+	try
+	{
+	    fis = new FileInputStream(Tools.prizeFile);
+	    byte[] b = new byte[fis.available()];
+	    fis.read(b);
+	    for (int i = 0; i < b.length; i++)
+	    {
+		sb.append((char) b[i]);
+	    }
+	    System.out.println("Read from file successfully");
+	    // Tools.delay(1);
+	    Tools.hold();
+	} catch (FileNotFoundException e)
+	{
+	    System.out.println(Tools.prizeFile.getAbsolutePath());
+	    System.out.println("No such file");
+	    System.exit(0);
+	} catch (IOException e)
+	{
+	    e.printStackTrace();
+	} finally
+	{
+	    try
+	    {
+		fis.close();
+	    } catch (IOException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return sb;
+    }
+
+    private boolean resumeGame(Player newPlayer)
+    {
+	System.out.println("Player already exist");
+	System.out.println("Would you like to resume your ganme:y/n?");
+	String answer = Tools.console.nextLine();
+	if (answer.equalsIgnoreCase("y"))
+	{
+	    player = playerList.sameNamePlayer(newPlayer);
+	    return true;
+	} else if (answer.equalsIgnoreCase("n"))
+	    return false;
+	else
+	{
+	    System.out.println("only y or n is accept");
+	    return resumeGame(newPlayer);
+	}
+    }
+
     private boolean setPlayer()
     {
 	return setPlayer(26298090, true);
@@ -423,24 +493,6 @@ public class Game
 	return false;
     }
 
-    private boolean resumeGame(Player newPlayer)
-    {
-	System.out.println("Player already exist");
-	System.out.println("Would you like to resume your ganme:y/n?");
-	String answer = Tools.console.nextLine();
-	if (answer.equalsIgnoreCase("y"))
-	{
-	    player = playerList.sameNamePlayer(newPlayer);
-	    return true;
-	} else if (answer.equalsIgnoreCase("n"))
-	    return false;
-	else
-	{
-	    System.out.println("only y or n is accept");
-	    return resumeGame(newPlayer);
-	}
-    }
-
     /**
      * Simply printout the Menu.
      */
@@ -457,31 +509,6 @@ public class Game
 	System.out.println("    (7) Exit Game");
 	System.out.println("  ============================================");
 	System.out.println("  Choose an option :");
-    }
-
-    /**
-     * Show a "table" in which contains all the information about the prize that
-     * the machine can give out.
-     */
-    private void showPrizes()
-    {
-	int longest = 0;
-	for (Prize prize : systemPrizeList)
-	{
-	    if (longest < prize.getName().length())
-		longest = prize.getName().length();
-	}
-	longest += 3;
-	String format = "|%17s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
-	/*
-	 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
-	 * format-example/
-	 */
-	System.out.printf(format, "Number Generated", "Prize is", "Prize Worth", "Cost to player");
-	for (Prize prize : systemPrizeList)
-	{
-	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1, prize.getName(), prize.getWorth(), prize.getCost());
-	}
     }
 
     /**

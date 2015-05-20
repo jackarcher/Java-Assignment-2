@@ -8,17 +8,31 @@ import systemTools.Tools;
 
 public class AdminControl
 {
+    /**
+     * references the exactly same list at class Game
+     */
     private ArrayList<Prize> systemPrizeList;
 
+    /**
+     * The only constructor in this class. Everyone wanna use this class will
+     * have to give a prize lise.
+     * 
+     * @param prizeList
+     *            references the exactly same list at class Game
+     */
     public AdminControl(ArrayList<Prize> prizeList)
     {
 	systemPrizeList = prizeList;
     }
 
+    /**
+     * This method is used to add a prize to the system prize list.
+     * 
+     * Inside this method, it will call a method inputPrize() in this class.
+     */
     private void addPrize()
     {
 	Prize input = inputPrize();
-	// validation
 	if (input != null)
 	{
 	    if (prizeListValidation(input) && systemPrizeList.add(input))
@@ -32,6 +46,13 @@ public class AdminControl
 	Tools.hold();
     }
 
+    /**
+     * This is a method to validate if the user has access to the admin
+     * user(this class).
+     * 
+     * @return true if the passwod is the same as here. False if the user has
+     *         tried 3 times.
+     */
     public boolean adminValidation()
     {
 	/*
@@ -60,6 +81,9 @@ public class AdminControl
 	return false;
     }
 
+    /**
+     * Displayer the admin menu.
+     */
     private void displayMenu()
     {
 	System.out.println(Tools.SEPARATOR + "		Admin Menu");
@@ -74,6 +98,14 @@ public class AdminControl
 	System.out.println("	Make your choice:");
     }
 
+    /**
+     * Let the user input some necessary information about the new prize
+     * 
+     * @return A new validated prize(validated here means the prize it self is
+     *         legal, however it may be illegal to the prize list, which will be
+     *         validate latter) or null if the user just wanna quit the add
+     *         action.
+     */
     private Prize inputPrize()
     {
 	String name;
@@ -108,7 +140,16 @@ public class AdminControl
 	}
     }
 
-    private boolean prizeListValidation(Prize newPrize)
+    /**
+     * This method is to validate the newPrzie if it is validate to the prize
+     * list.
+     * 
+     * @param newPrize
+     *            the given newPrize
+     * @return ture if the newPrize is legal to the prize list, which means
+     *         there is no duplicate name in this list. Or false if there is.
+     */
+    public boolean prizeListValidation(Prize newPrize)
     {
 	boolean flag = true;
 	if (newPrize == null)
@@ -122,6 +163,9 @@ public class AdminControl
 	return flag;
     }
 
+    /**
+     * Remove a prize inside the prize list.
+     */
     private void remove()
     {
 	System.out.println("This is the Prize List");
@@ -142,6 +186,9 @@ public class AdminControl
 	}
     }
 
+    /**
+     * The main process here in this method.
+     */
     public void runAdmin()
     {
 	int choice = 0;
@@ -201,6 +248,9 @@ public class AdminControl
 	}
     }
 
+    /**
+     * Write the prizelist to the txt file.
+     */
     private void writeFile()
     {
 	FileOutputStream fos = null;
