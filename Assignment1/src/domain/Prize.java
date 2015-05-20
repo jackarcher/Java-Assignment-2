@@ -148,7 +148,7 @@ public class Prize
 	// } else if (!name.equals(prize.name))
 	// return false;
 	// return true;
-	if (this.name != prize.name)
+	if (!this.name.equalsIgnoreCase(prize.name))
 	    return false;
 	else
 	    return true;

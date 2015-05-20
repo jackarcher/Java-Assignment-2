@@ -67,7 +67,7 @@ public class Game
 	luckyGuessGenerator = new LuckyGuessGenerator();
 	systemPrizeList = new ArrayList<Prize>();
 	adminControl = new AdminControl(systemPrizeList);
-	loadFile();
+	load(readFromFile());
 	this.range = systemPrizeList.size();
 	adminFlag = true;
     }
@@ -181,9 +181,9 @@ public class Game
     }
 
     /**
-     * Load or reload the prize file.
+     * Load or reload the prize txt file, convert it to a StringBuffer.
      */
-    private void loadFile()
+    private StringBuffer readFromFile()
     {
 	FileInputStream fis = null;
 	StringBuffer sb = new StringBuffer();
@@ -217,6 +217,16 @@ public class Game
 		e.printStackTrace();
 	    }
 	}
+	return sb;
+    }
+
+    //need more validation
+    /**
+     * 
+     * @param sb
+     */
+    private void load(StringBuffer sb)
+    {
 	if (sb.length() == 0)
 	    System.exit(0);
 	String[] prize = sb.toString().split(Tools.SEPARATOR);
@@ -318,6 +328,7 @@ public class Game
 		{
 		    System.out.print('\u000C');
 		    adminControl.runAdmin();
+		    load(readFromFile());
 		}
 		break;
 	    default:
