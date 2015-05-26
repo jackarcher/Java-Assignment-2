@@ -44,10 +44,24 @@ public class Prize
 	this.name = name.trim();
 	this.worth = worth;
 	this.cost = cost;
-	validation();
+	// validation();
+	if (worth <= 0)
+	    throw new ValidationException("Negative/zero worth value is not permitted");
+	if (cost <= 0)
+	    throw new ValidationException("Negative/zero cost value is not permitted");
+	if (name.isEmpty())
+	    throw new ValidationException("Empty Name is not permitted");
     }
 
-    @Override
+    /**
+     * To campare if 2 prize are "equal".
+     * 
+     * Here in this case, "equal" means same name.
+     * 
+     * @Override from class Object
+     * 
+     * @return true if equal, false if not.
+     */
     public boolean equals(Object obj)
     {
 	if (this == obj)
@@ -55,13 +69,6 @@ public class Prize
 	if (getClass() != obj.getClass())
 	    return false;
 	Prize prize = (Prize) obj;
-	// if (name == null)
-	// {
-	// if (prize.name != null)
-	// return false;
-	// } else if (!name.equals(prize.name))
-	// return false;
-	// return true;
 	if (!this.name.equalsIgnoreCase(prize.name))
 	    return false;
 	else
@@ -132,25 +139,25 @@ public class Prize
 	this.worth = worth;
     }
 
-    @Override
+    /**
+     * Change the needed information to string.
+     * 
+     * @Override from class Objedct.
+     * 
+     * @return the String contains some information about the player.
+     */
     public String toString()
     {
 	return name + "," + worth + "," + cost + Tools.SEPARATOR;
-	// return "Prize [name = " + name + ", worth = " + worth + ", cost = " +
-	// cost + "]";
     }
 
-    public void validation() throws ValidationException
-    {
-	// boolean flag = true;
-	// if (!(worth > 0 && cost > 0 && !name.isEmpty()))
-	// flag = false;
-	// return flag;
-	if (worth < 0)
-	    throw new ValidationException("Negative worth value is not permitted");
-	if (cost < 0)
-	    throw new ValidationException("Negative cost value is not permitted");
-	if (name.isEmpty())
-	    throw new ValidationException("Empty Name is not permitted");
-    }
+    /*
+     * public void validation() throws ValidationException { // boolean flag =
+     * true; // if (!(worth > 0 && cost > 0 && !name.isEmpty())) // flag =
+     * false; // return flag; if (worth < 0) throw new
+     * ValidationException("Negative worth value is not permitted"); if (cost <
+     * 0) throw new ValidationException("Negative cost value is not permitted");
+     * if (name.isEmpty()) throw new
+     * ValidationException("Empty Name is not permitted"); }
+     */
 }
