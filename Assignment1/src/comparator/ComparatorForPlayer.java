@@ -32,9 +32,9 @@ public class ComparatorForPlayer implements Comparator<Player>
     {
 	int result = o2.getWorth() - o1.getWorth();
 	if (result == 0)
-	    result = o2.getCost() - o1.getCost();
+	    result = o1.getCost() - o2.getCost();
 	if (result == 0)
-	    result = o2.getWaste() - o1.getWaste();
+	    result = o1.getWaste() - o2.getWaste();
 	return result;
 
     }

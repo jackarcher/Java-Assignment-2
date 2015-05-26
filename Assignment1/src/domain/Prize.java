@@ -47,6 +47,27 @@ public class Prize
 	validation();
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+	if (this == obj)
+	    return true;
+	if (getClass() != obj.getClass())
+	    return false;
+	Prize prize = (Prize) obj;
+	// if (name == null)
+	// {
+	// if (prize.name != null)
+	// return false;
+	// } else if (!name.equals(prize.name))
+	// return false;
+	// return true;
+	if (!this.name.equalsIgnoreCase(prize.name))
+	    return false;
+	else
+	    return true;
+    }
+
     /**
      * The getter of the field cost.
      * 
@@ -111,6 +132,14 @@ public class Prize
 	this.worth = worth;
     }
 
+    @Override
+    public String toString()
+    {
+	return name + "," + worth + "," + cost + Tools.SEPARATOR;
+	// return "Prize [name = " + name + ", worth = " + worth + ", cost = " +
+	// cost + "]";
+    }
+
     public void validation() throws ValidationException
     {
 	// boolean flag = true;
@@ -123,34 +152,5 @@ public class Prize
 	    throw new ValidationException("Negative cost value is not permitted");
 	if (name.isEmpty())
 	    throw new ValidationException("Empty Name is not permitted");
-    }
-
-    @Override
-    public String toString()
-    {
-	return name + "," + worth + "," + cost + Tools.SEPARATOR;
-	// return "Prize [name = " + name + ", worth = " + worth + ", cost = " +
-	// cost + "]";
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-	if (this == obj)
-	    return true;
-	if (getClass() != obj.getClass())
-	    return false;
-	Prize prize = (Prize) obj;
-	// if (name == null)
-	// {
-	// if (prize.name != null)
-	// return false;
-	// } else if (!name.equals(prize.name))
-	// return false;
-	// return true;
-	if (!this.name.equalsIgnoreCase(prize.name))
-	    return false;
-	else
-	    return true;
     }
 }
