@@ -24,7 +24,6 @@ public class PlayerList
     /**
      * The ordered(sorted) list.
      */
-    private ArrayList<Player> OrderedList;
 
     /**
      * Default constructor, the ordered list is initialized by the pList.
@@ -32,7 +31,6 @@ public class PlayerList
     public PlayerList()
     {
 	playerList = new ArrayList<Player>();
-	OrderedList = new ArrayList<Player>(playerList);
     }
 
     /**
@@ -51,7 +49,7 @@ public class PlayerList
 	    if (player.getName().equalsIgnoreCase(eachPlayer.getName()))
 		throw new ValidationException("Player already exist!");
 	}
-	return playerList.add(player) && OrderedList.add(player);
+	return playerList.add(player);
     }
 
     /**
@@ -61,7 +59,9 @@ public class PlayerList
      */
     public ArrayList<Player> getOrderedList()
     {
-	return OrderedList;
+	ArrayList<Player> orderedList = new ArrayList<Player>(playerList);
+	Collections.sort(orderedList, new ComparatorForPlayer());
+	return orderedList;
     }
 
     /**
@@ -114,13 +114,13 @@ public class PlayerList
 	return playerList.size();
     }
 
-    /**
-     * Sort the ordered list by prize.
-     */
-    public void sortByPrize()
-    {
-	Collections.sort(OrderedList, new ComparatorForPlayer());
-    }
+//    /**
+//     * Sort the ordered list by prize.
+//     */
+//    private void sortByPrize(ArrayList<Player> list)
+//    {
+//	Collections.sort(list, new ComparatorForPlayer());
+//    }
 
     /**
      * Check if there is already an player has the name of newPlayer.

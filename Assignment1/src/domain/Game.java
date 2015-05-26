@@ -121,7 +121,6 @@ public class Game
      */
     private void displayLuckiest(int i)
     {
-	playerList.sortByPrize();
 	displayPlayersInformation(i, false);
     }
 
@@ -213,7 +212,7 @@ public class Game
      */
     private void displayUsersInformation()
     {
-	System.out.println("Dear" + this.player.getName() + "," + Tools.SEPARATOR);
+	System.out.println("Dear " + this.player.getName() + "," + Tools.SEPARATOR);
 	if (!player.getPrizeList().isEmpty())
 	{
 	    System.out.println("So far, U have won: " + Tools.SEPARATOR);
@@ -283,6 +282,8 @@ public class Game
 	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
 	    if (!setPlayer(3))
 		return true;
+	    if(choice ==3 )
+		return false;
 	}
 	switch (choice)
 	{
@@ -319,9 +320,8 @@ public class Game
 		break;
 	    case 7:
 		System.out.println("Hope U have enjoyed the game!");
-		// System.exit(0);
 		player = null;
-		System.out.print("\u000c");
+		Tools.hold();
 		break;
 	    case 26298090:
 		if (adminFlag)
@@ -464,7 +464,7 @@ public class Game
 
 	}
 	System.out.println("U really just wanna play with me,right?");
-	System.exit(0);
+	Tools.delay(10);
 	return false;
     }
 

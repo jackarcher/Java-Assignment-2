@@ -9,8 +9,9 @@ import java.util.Collections;
 
 import javax.xml.bind.ValidationException;
 
-import comparator.SortForPrizeList;
 import systemTools.Tools;
+
+import comparator.SortForPrizeList;
 
 /**
  * This class refer to the game admin, or an admin "console", in which the admin
@@ -27,6 +28,11 @@ public class AdminControl
     private ArrayList<Prize> systemPrizeList;
 
     /**
+     * whether the change saved, true refers to saved.
+     */
+    private boolean saveFlag;
+
+    /**
      * The only constructor in this class. Everyone wanna use this class will
      * have to give a prize lise.
      * 
@@ -36,6 +42,7 @@ public class AdminControl
     public AdminControl()
     {
 	systemPrizeList = new ArrayList<Prize>();
+	saveFlag = true;
 	load(readFromFile());
     }
 
@@ -50,8 +57,10 @@ public class AdminControl
 	if (input != null)
 	{
 	    if (prizeListValidation(input) && systemPrizeList.add(input))
+	    {
 		System.out.println("Add to list successfully.");
-	    else
+		saveFlag = false;
+	    } else
 	    {
 		System.out.println("Add to list fail.");
 		System.out.println("	Detail: Validation fail: duplicate prize name.");
@@ -319,14 +328,52 @@ public class AdminControl
 		    Tools.hold();
 		    break;
 		case 5:
-		    System.out.print('\u000C');
-		    return;
+		    if (canQuit())
+			return;
+		    else
+			break;
 		case 6:
-		    System.exit(0);
+		    if (canQuit())
+			System.exit(0);
+		    else
+			break;
 		default:
 		    System.out.println("Please make choice using integer range 1 - 6.");
 		    break;
 	    }
+	}
+    }
+
+    /**
+     * 
+     * @return true means : ok to quit.
+     */
+    private boolean canQuit()
+    {
+	if (!saveFlag)
+	{
+	    System.out.println("unsaved change detect." + Tools.SEPARATOR);
+	    System.out.println("what to do?");
+	    System.out.println("1.Save");
+	    System.out.println("2.Quit without save");
+	    System.out.println("3.Cancle");
+	    switch (Tools.inputInteger())
+	    {
+		case 1:
+		    writeFile();
+		    return true;
+		case 2:
+		    return true;
+		case 3:
+		    return false;
+		default:
+		    System.out.println("Unknow command, back to menu");
+		    return false;
+	    }
+	} else
+	{
+	    System.out.print('\u000C');
+	    return true;
 	}
     }
 

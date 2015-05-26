@@ -77,7 +77,7 @@ public class Player
 	{
 	    if (other.name != null)
 		return false;
-	} else if (!name.equals(other.name))
+	} else if (!name.equalsIgnoreCase(other.name))
 	    return false;
 	return true;
     }
@@ -142,17 +142,6 @@ public class Player
     public void setCost(int cost)
     {
 	this.cost += cost;
-    }
-
-    /**
-     * The setter of the field name.
-     * 
-     * @param name
-     *            The name that u wanna set.
-     */
-    public void setName(String name)
-    {
-	this.name = name;
     }
 
     /**
