@@ -1,17 +1,10 @@
 package domain;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.xml.bind.ValidationException;
 
 import systemTools.Tools;
-
-import comparator.SortForPrizeList;
-
 import exceptions.IllegalInputException;
 
 /**
@@ -74,10 +67,9 @@ public class Game
 	playerList = new PlayerList();
 	player = null;
 	luckyGuessGenerator = new LuckyGuessGenerator();
-	systemPrizeList = new ArrayList<Prize>();
-	adminControl = new AdminControl(systemPrizeList);
-	load(readFromFile());
-	this.range = systemPrizeList.size();
+	adminControl = new AdminControl();
+	systemPrizeList = adminControl.getList();
+	range = systemPrizeList.size();
 	adminFlag = true;
     }
 
@@ -93,21 +85,18 @@ public class Game
     {
 	System.out.println("Your guess is " + userGuess);
 	System.out.println("The lucky number is:" + systemGuess);
+	Prize prize = systemPrizeList.get(userGuess - 1);
 	if (systemGuess == userGuess)
 	{
-	    Prize prize = systemPrizeList.get(systemGuess - 1);
 	    System.out.println("You are lucky! beacause you've just win a " + prize.getName() + "!");
 	    player.getPrizeList().add(prize);
-	    player.setPrizes(prize.getName());
 	    player.setWorth(prize.getWorth());
 	} else
 	{
-	    Prize prize = systemPrizeList.get(userGuess - 1);
 	    System.out.println("Damn! You've just waste $" + prize.getCost() + " here!");
 	    player.setWaste(prize.getCost());
 	}
-	player.setCost(systemPrizeList.get(userGuess - 1).getCost());// player.setSpent();
-	// (spent++)
+	player.setCost(prize.getCost());
 	Tools.hold();
     }
 
@@ -206,12 +195,12 @@ public class Game
 		longest = prize.getName().length();
 	}
 	longest += 3;
-	String format = "|%17s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
+	String format = "|%5s|%" + longest + "s|%12s|%15s|" + Tools.SEPARATOR;
 	/*
 	 * http://examples.javacodegeeks.com/core-java/lang/string/java-string-
 	 * format-example/
 	 */
-	System.out.printf(format, "Number Generated", "Prize is", "Prize Worth", "Cost to player");
+	System.out.printf(format, "No.", "Prize is", "Prize Worth", "Cost to player");
 	for (Prize prize : systemPrizeList)
 	{
 	    System.out.printf(format, systemPrizeList.indexOf(prize) + 1, prize.getName(), prize.getWorth(), prize.getCost());
@@ -275,56 +264,6 @@ public class Game
 	compareGuess(userGuess, systemGuess);
     }
 
-    // need more validation?
-    /**
-     * 
-     * @param sb
-     */
-    private void load(StringBuffer sb)
-    {
-	if (sb.length() == 0)
-	    System.exit(0);
-	String[] prize = sb.toString().split(Tools.SEPARATOR);
-	Prize newPrize = null;
-	System.out.println("Load report:");
-	for (String attribute : prize)
-	{
-	    String[] temp = attribute.split(",");
-	    if (temp.length == 3)
-	    {
-		try
-		{
-		    newPrize = new Prize(temp[0], Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
-		    if (adminControl.prizeListValidation(newPrize))
-			systemPrizeList.add(newPrize);
-		    else
-			System.out.println("line: \"" + attribute + "\" has already exist. This line will be ignored");
-		} catch (NumberFormatException e)
-		{
-		    System.out.println("line: \"" + attribute + "\" Worth or Cost onvert to integer fail, this line will be ignored");
-		} catch (ValidationException e)
-		{
-		    System.out.println(e.getMessage());
-		}
-	    } else
-	    {
-		System.out.println("line: \"" +  attribute + "\" is a illegal line");
-	    }
-	}
-	Collections.sort(systemPrizeList, new SortForPrizeList());
-	/*
-	 * for (int i = 1; i < systemPrizeList.size(); i++) { if
-	 * (systemPrizeList.get(i).getCost() == systemPrizeList.get(i -
-	 * 1).getCost()) { System.out.println("Remove the same cost prize!" +
-	 * Tools.SEPARATOR + "Detail:");
-	 * System.out.println(systemPrizeList.get(i).toString());
-	 * systemPrizeList.remove(i); } }
-	 */
-	this.range = systemPrizeList.size();
-	System.out.println("Load done!");
-	Tools.hold();
-    }
-
     /**
      * The method that use for make choice. Basically choice only (and should
      * only) happens after the menu has been output, so this is a private method
@@ -333,6 +272,7 @@ public class Game
      * @throws IllegalInputException
      *             This exception happens when user input something other than
      *             integer 1-5 and let people choice again.
+     * @return true if wanna display "welcome".
      */
     private boolean makeChoice() throws IllegalInputException
     {
@@ -429,45 +369,13 @@ public class Game
     }
 
     /**
-     * Load or reload the prize txt file, convert it to a StringBuffer.
+     * Try resume the game for a existed player
+     * 
+     * @param newPlayer
+     *            The new created player object, with the name existed.
+     * @return Tue if the player resume the game, false if the player wanna pick
+     *         a new name.
      */
-    private StringBuffer readFromFile()
-    {
-	FileInputStream fis = null;
-	StringBuffer sb = new StringBuffer();
-	try
-	{
-	    fis = new FileInputStream(Tools.prizeFile);
-	    byte[] b = new byte[fis.available()];
-	    fis.read(b);
-	    for (int i = 0; i < b.length; i++)
-	    {
-		sb.append((char) b[i]);
-	    }
-	    System.out.println("Read from file successfully");
-	    // Tools.delay(1);
-	    Tools.hold();
-	} catch (FileNotFoundException e)
-	{
-	    System.out.println(Tools.prizeFile.getAbsolutePath());
-	    System.out.println("No such file");
-	    System.exit(0);
-	} catch (IOException e)
-	{
-	    e.printStackTrace();
-	} finally
-	{
-	    try
-	    {
-		fis.close();
-	    } catch (IOException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return sb;
-    }
-
     private boolean resumeGame(Player newPlayer)
     {
 	System.out.println("Player already exist");
@@ -481,16 +389,28 @@ public class Game
 	    return false;
 	else
 	{
-	    System.out.println("only y or n is accept");
+	    System.out.println("only Y or N is accept");
 	    return resumeGame(newPlayer);
 	}
     }
 
+    /**
+     * Another option for setPlayer(), use as default one, ask the player until
+     * he/she give the name.
+     * 
+     * @return True if player set successfully. False if anything goes wrong.
+     */
     private boolean setPlayer()
     {
 	return setPlayer(26298090, true);
     }
 
+    /**
+     * Another option for setPlayer(), ask the player a specific times to set
+     * the player.
+     * 
+     * @return True if player set successfully. False if anything goes wrong.
+     */
     private boolean setPlayer(int x)
     {
 	return setPlayer(x, false);
@@ -521,7 +441,6 @@ public class Game
 		try
 		{
 		    newPlayer = new Player(temp);
-		    newPlayer.validation();
 		    if (playerList.validation(newPlayer))
 		    {
 			player = newPlayer;

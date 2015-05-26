@@ -85,6 +85,26 @@ public class PlayerList
     }
 
     /**
+     * Find a duplicate name player.
+     * 
+     * @param newPlayer
+     *            the new created player.
+     * @return the player if there is a player has the same name, null if the
+     *         player does not exist.
+     */
+    public Player sameNamePlayer(Player newPlayer)
+    {
+	for (Player player : playerList)
+	{
+	    if (player.equals(newPlayer))
+	    {
+		return player;
+	    }
+	}
+	return null;
+    }
+
+    /**
      * Get the number of elements the List contains.
      * 
      * @return the number of elements the List contains
@@ -102,24 +122,20 @@ public class PlayerList
 	Collections.sort(OrderedList, new ComparatorForPlayer());
     }
 
+    /**
+     * Check if there is already an player has the name of newPlayer.
+     * 
+     * @param newPlayer
+     *            New created player.
+     * @return True if validation pass(no duplicate name), False if validation
+     *         fail(player already exist).
+     */
     public boolean validation(Player newPlayer)
     {
 	boolean flag = true;
 	if (sameNamePlayer(newPlayer) != null)
 	    flag = false;
 	return flag;
-    }
-
-    public Player sameNamePlayer(Player newPlayer)
-    {
-	for (Player player : playerList)
-	{
-	    if (player.equals(newPlayer))
-	    {
-		return player;
-	    }
-	}
-	return null;
     }
 
 }

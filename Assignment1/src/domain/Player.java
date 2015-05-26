@@ -19,11 +19,6 @@ public class Player
      */
     private String name;
     /**
-     * The prizes that the player has got.
-     */
-    private String prizes;// to be replaced by PrizeList
-    // discuss with tutor on whether I can do this.
-    /**
      * The prize list save all the prizes that the player has already won.
      */
     private ArrayList<Prize> prizeList;
@@ -41,22 +36,6 @@ public class Player
     private int waste;
 
     /**
-     * Default constructor. May seldom be called.
-     * 
-     * @throws ValidationException
-     */
-    public Player() throws ValidationException
-    {
-	this.name = "";
-	this.prizes = "";
-	this.prizeList = new ArrayList<Prize>();
-	this.worth = 0;
-	this.cost = 0;
-	this.waste = 0;
-	validation();
-    }
-
-    /**
      * Constructor using field name.
      * 
      * @param name
@@ -66,13 +45,41 @@ public class Player
     public Player(String name) throws ValidationException
     {
 	this.name = name.trim();
-	this.prizes = "";
 	this.prizeList = new ArrayList<Prize>();
 	this.worth = 0;
 	this.cost = 0;
 	this.waste = 0;
-	validation();
+	// validation();
+	if (name.isEmpty())
+	    throw new ValidationException("Empty Name is not permitted");
 
+    }
+
+    /**
+     * To campare if 2 players are "equal".
+     * 
+     * Here in this case, "equal" means same name.
+     * 
+     * @Override from class Object
+     * 
+     * @return true if equal, false if not.
+     */
+    public boolean equals(Object obj)
+    {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Player other = (Player) obj;
+	if (name == null)
+	{
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	return true;
     }
 
     /**
@@ -103,16 +110,6 @@ public class Player
     public ArrayList<Prize> getPrizeList()
     {
 	return prizeList;
-    }
-
-    /**
-     * The getter of field prizes.
-     * 
-     * @return The prizes that the player has already got.
-     */
-    public String getPrizes()
-    {
-	return prizes;
     }
 
     /**
@@ -159,17 +156,6 @@ public class Player
     }
 
     /**
-     * The setter of field prizes. Only ADD the new prize.
-     * 
-     * @param prizes
-     *            The new prizes that should be ADDED to the prizes.
-     */
-    public void setPrizes(String prizes)
-    {
-	this.prizes = this.prizes + prizes + " ";
-    }
-
-    /**
      * The setter of the field waste. Only ADD the money the player has just
      * waste.
      * 
@@ -192,35 +178,24 @@ public class Player
 	this.worth = this.worth + worth;
     }
 
-    @Override
+    /**
+     * 
+     * @Override from class Objedct.
+     * 
+     * @return the String contains some information about the player.
+     */
     public String toString()
     {
-	// TODO Auto-generated method stub
 	return "Player Name: " + name + Tools.SEPARATOR + "	total prize:" + worth;
     }
 
-    public void validation() throws ValidationException
-    {
-	if (name.isEmpty())
-	    throw new ValidationException("Empty Name is not permitted");
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Player other = (Player) obj;
-	if (name == null)
-	{
-	    if (other.name != null)
-		return false;
-	} else if (!name.equals(other.name))
-	    return false;
-	return true;
-    }
+    // /**
+    // * validation if the player is legal.
+    // * @throws ValidationException When name is empty.
+    // */
+    // public void validation() throws ValidationException
+    // {
+    // if (name.isEmpty())
+    // throw new ValidationException("Empty Name is not permitted");
+    // }
 }

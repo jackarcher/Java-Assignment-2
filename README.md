@@ -8,7 +8,7 @@ My email : jacknimrodarcher@gmail.com
 
 version
 --------
-ver 2.5
+ver 2.6
 
 Read me:
 --------

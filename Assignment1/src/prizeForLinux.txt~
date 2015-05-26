@@ -1,0 +1,13 @@
+Keyboard,50,5
+Keyboard ,50,5
+Mouse,40,4
+DVD,30,3
+Book,20,2
+Pen,10,1
+HDD,100,7
+Modem,90,8
+Laptop,120,6
+,,
+test,a,5
+test,5,a
+test,,

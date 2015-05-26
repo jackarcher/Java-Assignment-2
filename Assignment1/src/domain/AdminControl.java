@@ -1,11 +1,24 @@
 package domain;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import javax.xml.bind.ValidationException;
+
+import comparator.SortForPrizeList;
 import systemTools.Tools;
 
+/**
+ * This class refer to the game admin, or an admin "console", in which the admin
+ * can maintain the system prize list after validation.
+ * 
+ * @author archer
+ *
+ */
 public class AdminControl
 {
     /**
@@ -20,9 +33,10 @@ public class AdminControl
      * @param prizeList
      *            references the exactly same list at class Game
      */
-    public AdminControl(ArrayList<Prize> prizeList)
+    public AdminControl()
     {
-	systemPrizeList = prizeList;
+	systemPrizeList = new ArrayList<Prize>();
+	load(readFromFile());
     }
 
     /**
@@ -98,6 +112,11 @@ public class AdminControl
 	System.out.println("	Make your choice:");
     }
 
+    public ArrayList<Prize> getList()
+    {
+	return systemPrizeList;
+    }
+
     /**
      * Let the user input some necessary information about the new prize
      * 
@@ -140,6 +159,56 @@ public class AdminControl
 	}
     }
 
+    // need more validation?
+    /**
+     * 
+     * @param sb
+     */
+    private void load(StringBuffer sb)
+    {
+	if (sb.length() == 0)
+	    System.exit(0);
+	String[] prize = sb.toString().split(Tools.SEPARATOR);
+	Prize newPrize = null;
+	System.out.println("Load report:");
+	for (String attribute : prize)
+	{
+	    String[] temp = attribute.split(",");
+	    if (temp.length == 3)
+	    {
+		try
+		{
+		    newPrize = new Prize(temp[0], Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
+		    if (prizeListValidation(newPrize))
+			systemPrizeList.add(newPrize);
+		    else
+			System.out.println("line: \"" + attribute + "\" has already exist. This line will be ignored");
+		} catch (NumberFormatException e)
+		{
+		    System.out.println("line: \"" + attribute + "\" Worth or Cost onvert to integer fail, this line will be ignored");
+		} catch (ValidationException e)
+		{
+		    System.out.println(e.getMessage());
+		}
+	    } else
+	    {
+		System.out.println("line: \"" + attribute + "\" is a illegal line");
+	    }
+	}
+	Collections.sort(systemPrizeList, new SortForPrizeList());
+	/*
+	 * for (int i = 1; i < systemPrizeList.size(); i++) { if
+	 * (systemPrizeList.get(i).getCost() == systemPrizeList.get(i -
+	 * 1).getCost()) { System.out.println("Remove the same cost prize!" +
+	 * Tools.SEPARATOR + "Detail:");
+	 * System.out.println(systemPrizeList.get(i).toString());
+	 * systemPrizeList.remove(i); } }
+	 */
+	// this.range = systemPrizeList.size();
+	System.out.println("Load done!");
+	Tools.hold();
+    }
+
     /**
      * This method is to validate the newPrzie if it is validate to the prize
      * list.
@@ -159,6 +228,46 @@ public class AdminControl
 		return false;
 	}
 	return true;
+    }
+
+    /**
+     * Load or reload the prize txt file, convert it to a StringBuffer.
+     */
+    private StringBuffer readFromFile()
+    {
+	FileInputStream fis = null;
+	StringBuffer sb = new StringBuffer();
+	try
+	{
+	    fis = new FileInputStream(Tools.prizeFile);
+	    byte[] b = new byte[fis.available()];
+	    fis.read(b);
+	    for (int i = 0; i < b.length; i++)
+	    {
+		sb.append((char) b[i]);
+	    }
+	    System.out.println("Read from file successfully");
+	    // Tools.delay(1);
+	    Tools.hold();
+	} catch (FileNotFoundException e)
+	{
+	    System.out.println(Tools.prizeFile.getAbsolutePath());
+	    System.out.println("No such file");
+	    System.exit(0);
+	} catch (IOException e)
+	{
+	    e.printStackTrace();
+	} finally
+	{
+	    try
+	    {
+		fis.close();
+	    } catch (IOException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return sb;
     }
 
     /**
@@ -279,5 +388,4 @@ public class AdminControl
 	    }
 	}
     }
-
 }
