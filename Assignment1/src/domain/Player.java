@@ -50,7 +50,7 @@ public class Player
 	this.cost = 0;
 	this.waste = 0;
 	// validation();
-	if (name.isEmpty())
+	if (this.name.isEmpty())
 	    throw new ValidationException("Empty Name is not permitted");
 
     }

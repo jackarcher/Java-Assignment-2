@@ -336,6 +336,7 @@ public class Game
 		    System.out.print('\u000C');
 		    adminControl.runAdmin();
 		    range = systemPrizeList.size();
+		    System.out.print('\u000C');
 		}
 		break;
 	    default:
