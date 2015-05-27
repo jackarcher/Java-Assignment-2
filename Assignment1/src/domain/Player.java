@@ -139,9 +139,15 @@ public class Player
      * @param cost
      *            The money the player has just spent(NOT TOTAL).
      */
-    public void setCost(int cost)
+    public boolean setCost(int cost)
     {
+	if (cost <= 0)
+	{
+	    System.out.println("negativ cost detect");
+	    return false;
+	}
 	this.cost += cost;
+	return true;
     }
 
     /**
@@ -151,9 +157,15 @@ public class Player
      * @param waste
      *            The money the player has just waste.
      */
-    public void setWaste(int waste)
+    public boolean setWaste(int waste)
     {
+	if (waste <= 0)
+	{
+	    System.out.println("negativ waste detect");
+	    return false;
+	}
 	this.waste += waste;
+	return false;
     }
 
     /**
@@ -162,9 +174,15 @@ public class Player
      * @param worth
      *            The worth of the prize that the player has just won.
      */
-    public void setWorth(int worth)
+    public boolean setWorth(int worth)
     {
+	if (cost <= 0)
+	{
+	    System.out.println("negativ worth detect");
+	    return false;
+	}
 	this.worth = this.worth + worth;
+	return true;
     }
 
     /**

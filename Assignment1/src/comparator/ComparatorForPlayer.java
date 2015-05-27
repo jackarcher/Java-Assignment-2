@@ -31,10 +31,10 @@ public class ComparatorForPlayer implements Comparator<Player>
     public int compare(Player o1, Player o2)
     {
 	int result = o2.getWorth() - o1.getWorth();
-	if (result == 0)
+/*	if (result == 0)
 	    result = o1.getCost() - o2.getCost();
 	if (result == 0)
-	    result = o1.getWaste() - o2.getWaste();
+	    result = o1.getWaste() - o2.getWaste();*/
 	return result;
 
     }
