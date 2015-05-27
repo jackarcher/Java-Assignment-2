@@ -168,7 +168,7 @@ public class Player
     }
 
     /**
-     * Change the needed information to string. 
+     * Change the needed information to string.
      * 
      * @Override from class Objedct.
      * 
