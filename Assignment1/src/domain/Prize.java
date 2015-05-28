@@ -105,47 +105,6 @@ public class Prize
 	return worth;
     }
 
-    /**
-     * The setter of the field cost.
-     * 
-     * @param cost
-     *            the cost the prize should be.
-     */
-    public void setCost(int cost)
-    {
-	this.cost = cost;
-    }
-
-    /**
-     * The setter of the field Name. If you wanna change the name of the prize,
-     * you can use it.
-     * 
-     * @param name
-     *            The name you would like to change.
-     */
-    public void setName(String name)
-    {
-	this.name = name;
-    }
-
-    /**
-     * The setter of the field worth.
-     * 
-     * @param worth
-     *            The worth you wanna change.
-     */
-    public void setWorth(int worth)
-    {
-	this.worth = worth;
-    }
-
-    /**
-     * Change the needed information to string.
-     * 
-     * @Override from class Objedct.
-     * 
-     * @return the String contains some information about the player.
-     */
     public String toString()
     {
 	return name + "," + worth + "," + cost + Tools.SEPARATOR;

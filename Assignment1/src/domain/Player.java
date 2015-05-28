@@ -176,7 +176,7 @@ public class Player
      */
     public boolean setWorth(int worth)
     {
-	if (cost <= 0)
+	if (worth <= 0)
 	{
 	    System.out.println("negativ worth detect");
 	    return false;

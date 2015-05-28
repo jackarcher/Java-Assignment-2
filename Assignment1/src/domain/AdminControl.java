@@ -27,6 +27,7 @@ public class AdminControl
      */
     private ArrayList<Prize> systemPrizeList;
 
+    private ArrayList<Prize> backUpList;
     /**
      * whether the change saved, true refers to saved.
      */
@@ -44,6 +45,7 @@ public class AdminControl
 	systemPrizeList = new ArrayList<Prize>();
 	saveFlag = true;
 	load(readFromFile());
+	backUpList = new ArrayList<Prize>(systemPrizeList);
     }
 
     /**
@@ -76,7 +78,7 @@ public class AdminControl
      * @return true if the passwod is the same as here. False if the user has
      *         tried 3 times.
      */
-    public boolean adminValidation()
+    private boolean adminValidation()
     {
 	/*
 	 * http://stackoverflow.com/questions/8138411/masking-password-input-from
@@ -96,12 +98,59 @@ public class AdminControl
 	    System.out.println("You have " + i + " times left");
 	    System.out.print("Password: ");
 	    pwd = Tools.console.nextLine();
-	    if (pwd.equals("12345"))
+	    if (pwd.equals("FIT9131"))
 		return true;
 	}
 	System.out.println("You are not admin, are you?");
 	System.out.println("You won't got permission until u reboot whole system.");
 	return false;
+    }
+
+    /**
+     * back up the back-up list.
+     */
+    private void BackUp()
+    {
+	backUpList.clear();
+	backUpList.addAll(systemPrizeList);
+	saveFlag = true;
+    }
+
+    /**
+     * 
+     * @return true means : ok to quit.
+     */
+    private boolean canQuit()
+    {
+	if (!saveFlag)
+	{
+	    System.out.println("unsaved change detect." + Tools.SEPARATOR);
+	    System.out.println("what to do?");
+	    System.out.println("1.Save");
+	    System.out.println("2.Quit without save");
+	    System.out.println("3.Cancle");
+	    switch (Tools.inputInteger())
+	    {
+		case 1:
+		    writeFile();
+		    saveFlag = true;
+		    return true;
+		case 2:
+		    systemPrizeList.clear();
+		    systemPrizeList.addAll(backUpList);
+		    saveFlag = true;
+		    return true;
+		case 3:
+		    return false;
+		default:
+		    System.out.println("Unknow command, back to Admin menu");
+		    return false;
+	    }
+	} else
+	{
+	    System.out.print('\u000C');
+	    return true;
+	}
     }
 
     /**
@@ -227,7 +276,7 @@ public class AdminControl
      * @return ture if the newPrize is legal to the prize list, which means
      *         there is no duplicate name in this list. Or false if there is.
      */
-    public boolean prizeListValidation(Prize newPrize)
+    private boolean prizeListValidation(Prize newPrize)
     {
 	if (newPrize == null)
 	    return false;
@@ -282,7 +331,7 @@ public class AdminControl
     /**
      * Remove a prize inside the prize list.
      */
-    private void remove()
+    private void removePrize()
     {
 	System.out.println("This is the Prize List");
 	showPrizes();
@@ -292,22 +341,28 @@ public class AdminControl
 	    return;
 	try
 	{
-	    systemPrizeList.remove(choice - 1);
+	    System.out.println("Prize:" + Tools.SEPARATOR + systemPrizeList.remove(choice - 1).getName() + Tools.SEPARATOR + "remove successfully");
+	    saveFlag = false;
 	    Tools.hold();
 	} catch (IndexOutOfBoundsException e)
 	{
 	    System.out.println("Please input a number within the range: 1 - " + systemPrizeList.size());
 	    Tools.hold();
-	    remove();
+	    removePrize();
 	}
     }
 
     /**
      * The main process here in this method.
+     * 
+     * @return true if the admin validation pass, false if not.
      */
-    public void runAdmin()
+    public boolean runAdmin()
     {
+	if (!adminValidation())
+	    return false;
 	int choice = 0;
+	BackUp();
 	while (true)
 	{
 	    displayMenu();
@@ -318,7 +373,7 @@ public class AdminControl
 		    addPrize();
 		    break;
 		case 2:
-		    remove();
+		    removePrize();
 		    break;
 		case 3:
 		    writeFile();
@@ -329,7 +384,7 @@ public class AdminControl
 		    break;
 		case 5:
 		    if (canQuit())
-			return;
+			return true;
 		    else
 			break;
 		case 6:
@@ -341,39 +396,6 @@ public class AdminControl
 		    System.out.println("Please make choice using integer range 1 - 6.");
 		    break;
 	    }
-	}
-    }
-
-    /**
-     * 
-     * @return true means : ok to quit.
-     */
-    private boolean canQuit()
-    {
-	if (!saveFlag)
-	{
-	    System.out.println("unsaved change detect." + Tools.SEPARATOR);
-	    System.out.println("what to do?");
-	    System.out.println("1.Save");
-	    System.out.println("2.Quit without save");
-	    System.out.println("3.Cancle");
-	    switch (Tools.inputInteger())
-	    {
-		case 1:
-		    writeFile();
-		    return true;
-		case 2:
-		    return true;
-		case 3:
-		    return false;
-		default:
-		    System.out.println("Unknow command, back to menu");
-		    return false;
-	    }
-	} else
-	{
-	    System.out.print('\u000C');
-	    return true;
 	}
     }
 

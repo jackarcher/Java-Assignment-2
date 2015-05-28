@@ -110,6 +110,8 @@ public class Game
 	System.out.println("Second, if U do something wrong, just follow the instruction" + Tools.SEPARATOR);
 	System.out.println("And here is the prize list!" + Tools.SEPARATOR);
 	displayPrizes();
+	System.out.println(Tools.SEPARATOR + "When you guess, choice the No. in the table." + Tools.SEPARATOR);
+	System.out.println("Go win the prize!");
 	Tools.hold();
     }
 
@@ -138,6 +140,7 @@ public class Game
 	System.out.println("    (5) Display all players's statistics");
 	System.out.println("    (6) Display Game Help");
 	System.out.println("    (7) Exit Game");
+	System.out.println("    (8) Admin Mode");
 	System.out.println("  ============================================");
 	System.out.println("  Choose an option :");
     }
@@ -282,7 +285,7 @@ public class Game
 	    System.out.println("You will have to create a new player first!" + Tools.SEPARATOR);
 	    if (!setPlayer(3))
 		return true;
-	    if(choice ==3 )
+	    if (choice == 3)
 		return false;
 	}
 	switch (choice)
@@ -319,28 +322,26 @@ public class Game
 		displayGameHelp();
 		break;
 	    case 7:
-		System.out.println("Hope U have enjoyed the game!");
+		System.out.println("Hope U have enjoyed the game!" + Tools.SEPARATOR);
+		System.out.println("You can resume your game by input your name when creating new player!");
 		player = null;
 		Tools.hold();
 		break;
-	    case 26298090:
-		if (adminFlag)
-		    adminFlag = adminControl.adminValidation();
-		else
+	    case 8:
+		if (!adminFlag)
 		{
 		    System.out.println("You have try 3 times");
 		    Tools.hold();
-		}
-		if (adminFlag)
+		} else
 		{
 		    System.out.print('\u000C');
-		    adminControl.runAdmin();
+		    adminFlag = adminControl.runAdmin();
 		    range = systemPrizeList.size();
 		    System.out.print('\u000C');
 		}
 		break;
 	    default:
-		throw new IllegalInputException("Please make choice using integer range 1 - 7.");
+		throw new IllegalInputException("Please make choice using integer range 1 -  8.");
 	}
 	return displayWelcome;
     }
