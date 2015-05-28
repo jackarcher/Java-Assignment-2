@@ -21,9 +21,6 @@ public class PlayerList
      * The list in original order.
      */
     private ArrayList<Player> playerList;
-    /**
-     * The ordered(sorted) list.
-     */
 
     /**
      * Default constructor, the ordered list is initialized by the pList.
@@ -114,13 +111,13 @@ public class PlayerList
 	return playerList.size();
     }
 
-//    /**
-//     * Sort the ordered list by prize.
-//     */
-//    private void sortByPrize(ArrayList<Player> list)
-//    {
-//	Collections.sort(list, new ComparatorForPlayer());
-//    }
+    // /**
+    // * Sort the ordered list by prize.
+    // */
+    // private void sortByPrize(ArrayList<Player> list)
+    // {
+    // Collections.sort(list, new ComparatorForPlayer());
+    // }
 
     /**
      * Check if there is already an player has the name of newPlayer.
