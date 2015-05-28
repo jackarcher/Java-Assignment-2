@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import javax.xml.bind.ValidationException;
 
+import systemTools.Tools;
 import domain.Game;
 import domain.Player;
+import domain.PlayerList;
 import domain.Prize;
 
 public class Main
@@ -27,8 +29,8 @@ public class Main
 	//
 	// System.out.println(p.toString());
 
-	 Game game = new Game();
-	 game.play();
+	Game game = new Game();
+	game.play();
 
 	// System.out.println(File.separator);
 	//
@@ -111,13 +113,12 @@ public class Main
 	// System.out.println(player.getName());
 	// }
 
-//	ArrayList<Player> o = getSortedList();
-//	for (int i = 0; i < 3; i++)
-//	{
-//	    System.out.println(o.get(i).toString());
-//	}
+	// ArrayList<Player> o = getSortedList();
+	// for (int i = 0; i < 3; i++)
+	// {
+	// System.out.println(o.get(i).toString());
+	// }
     }
-
 
     public static void exchange(int i, int j, ArrayList<Prize> list)
     {

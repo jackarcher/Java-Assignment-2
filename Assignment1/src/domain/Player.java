@@ -30,6 +30,7 @@ public class Player
      * The money that the player has spend.
      */
     private int cost;
+
     /**
      * The money that the player has waste;
      */
